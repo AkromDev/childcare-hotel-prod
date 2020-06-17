@@ -14,6 +14,8 @@ const en = {
         arrivalAfterDeparture:
           'Departure date must be after the arrival date',
         periodPast: 'The period must be in the future',
+        periodFull:
+          'Sorry, the Pet Hotel is full at this time',
       },
     },
   },

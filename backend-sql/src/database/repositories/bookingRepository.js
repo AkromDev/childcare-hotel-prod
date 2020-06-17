@@ -2,6 +2,8 @@ const models = require('../models');
 const SequelizeFilter = require('../utils/sequelizeFilter');
 const SequelizeAutocompleteFilter = require('../utils/sequelizeAutocompleteFilter');
 const AbstractEntityRepository = require('./abstractEntityRepository');
+const { Op } = models.Sequelize;
+const bookingStatus = require('../../enumerators/bookingStatus');
 
 class BookingRepository extends AbstractEntityRepository {
   constructor() {
@@ -164,6 +166,55 @@ class BookingRepository extends AbstractEntityRepository {
     });
 
     return count > 0;
+  }
+
+  async countActiveBookingInPeriod(
+    start,
+    end,
+    idToExclude,
+  ) {
+    const statusFilter = {
+      status: {
+        [Op.in]: [
+          bookingStatus.BOOKED,
+          bookingStatus.PROGRESS,
+        ],
+      },
+    };
+
+    // departure >= start and arrival <= end
+    const periodFilter = {
+      [Op.and]: {
+        arrival: {
+          [Op.lte]: end,
+        },
+        departure: {
+          [Op.gte]: start,
+        },
+      },
+    };
+
+    let where = {
+      ...periodFilter,
+      ...statusFilter,
+    };
+
+    if (idToExclude) {
+      const idToExcludeFilter = {
+        id: { [Op.ne]: idToExclude },
+      };
+
+      where = {
+        ...where,
+        ...idToExcludeFilter,
+      };
+    }
+
+    const count = await models.booking.count({
+      where,
+    });
+
+    return count;
   }
 }
 

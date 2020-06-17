@@ -154,6 +154,8 @@ const en = {
       },
       validation: {
         periodPast: 'The period must be in the future',
+        periodFull:
+          'Sorry, the Pet Hotel is full at this time',
       },
     },
   },

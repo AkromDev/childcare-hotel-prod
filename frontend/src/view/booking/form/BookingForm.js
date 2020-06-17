@@ -375,7 +375,9 @@ class BookingForm extends Component {
                   {...tailFormItemLayout}
                 >
                   <Button
-                    loading={saveLoading}
+                    loading={
+                      saveLoading || form.isSubmitting
+                    }
                     type="primary"
                     htmlType="submit"
                     icon="save"
@@ -384,7 +386,9 @@ class BookingForm extends Component {
                   </Button>
 
                   <Button
-                    disabled={saveLoading}
+                    disabled={
+                      saveLoading || form.isSubmitting
+                    }
                     onClick={form.handleReset}
                     icon="undo"
                   >

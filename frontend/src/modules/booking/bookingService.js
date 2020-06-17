@@ -217,4 +217,34 @@ export default class BookingService {
 
     return response.data.bookingAutocomplete;
   }
+
+  static async isPeriodAvailable(
+    arrival,
+    departure,
+    idToExclude,
+  ) {
+    const response = await graphqlClient.query({
+      query: gql`
+        query BOOKING_PERIOD_AVAILABLE(
+          $arrival: DateTime!
+          $departure: DateTime!
+          $idToExclude: String
+        ) {
+          bookingPeriodAvailable(
+            arrival: $arrival
+            departure: $departure
+            idToExclude: $idToExclude
+          )
+        }
+      `,
+
+      variables: {
+        arrival,
+        departure,
+        idToExclude,
+      },
+    });
+
+    return response.data.bookingPeriodAvailable;
+  }
 }

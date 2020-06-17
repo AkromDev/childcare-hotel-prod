@@ -2,6 +2,8 @@ const AbstractEntityRepository = require('./abstractEntityRepository');
 const admin = require('firebase-admin');
 const FirebaseQuery = require('../utils/firebaseQuery');
 const Booking = require('../models/booking');
+const moment = require('moment');
+const bookingStatus = require('../../enumerators/bookingStatus');
 
 class BookingRepository extends AbstractEntityRepository {
   constructor() {
@@ -165,6 +167,42 @@ class BookingRepository extends AbstractEntityRepository {
       .get();
 
     return collection.size > 0;
+  }
+
+  async countActiveBookingsInPeriod(
+    start,
+    end,
+    idToExclude,
+  ) {
+    // departure >= start and arrival <= end
+    let query = await admin
+      .firestore()
+      .collection(`booking`)
+      .where('departure', '>=', start)
+      .get();
+
+    const results = this.mapCollection(query);
+
+    if (!results || !results.length) {
+      return 0;
+    }
+
+    const arrivalFilter = (item) =>
+      moment(item.arrival).isSameOrBefore(end);
+
+    const statusFilter = (item) =>
+      [
+        bookingStatus.BOOKED,
+        bookingStatus.PROGRESS,
+      ].includes(item.status);
+
+    const idToExcludeFilter = (item) =>
+      !idToExclude || item.id !== idToExclude;
+
+    return results
+      .filter(arrivalFilter)
+      .filter(idToExcludeFilter)
+      .filter(statusFilter).length;
   }
 }
 

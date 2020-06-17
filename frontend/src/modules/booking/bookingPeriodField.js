@@ -3,6 +3,7 @@ import moment from 'moment';
 import * as yup from 'yup';
 import { i18n } from 'i18n';
 import bookingStatus from 'modules/booking/bookingStatus';
+import BookingService from 'modules/booking/bookingService';
 
 export default class BookingPeriodField extends DateTimeRangeField {
   constructor(name, label, { required = false } = {}) {
@@ -58,6 +59,39 @@ export default class BookingPeriodField extends DateTimeRangeField {
         }
 
         return moment().isBefore(value[0]);
+      },
+    );
+
+    yupChain = yupChain.test(
+      'period-available',
+      i18n('entities.booking.validation.periodFull'),
+      function(value) {
+        if (!value || value.length < 2) {
+          return true;
+        }
+
+        const [arrival, departure] = value;
+
+        if (!arrival || !departure) {
+          return true;
+        }
+
+        const { id, status } = this.parent;
+
+        if (
+          ![
+            bookingStatus.PROGRESS,
+            bookingStatus.BOOKED,
+          ].includes(status)
+        ) {
+          return true;
+        }
+
+        return BookingService.isPeriodAvailable(
+          arrival,
+          departure,
+          id,
+        );
       },
     );
 

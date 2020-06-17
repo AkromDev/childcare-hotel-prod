@@ -6,6 +6,7 @@ const UserRoleChecker = require('./iam/userRoleChecker');
 const ForbiddenError = require('../errors/forbiddenError');
 const bookingStatus = require('../enumerators/bookingStatus');
 const moment = require('moment');
+const SettingsService = require('./settingsService');
 
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
@@ -36,6 +37,7 @@ module.exports = class BookingService {
 
   async _validateCreate(data) {
     await this._validatePeriodFuture(data);
+    await this._validatePeriodAvailable(null, data);
 
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
       if (data.owner !== this.currentUser.id) {
@@ -83,6 +85,7 @@ module.exports = class BookingService {
 
   async _validateUpdate(id, data) {
     await this._validatePeriodFuture(data);
+    await this._validatePeriodAvailable(id, data);
 
     const existingData = await this.findById(id);
 
@@ -265,5 +268,45 @@ module.exports = class BookingService {
         'entities.booking.validation.periodPast',
       );
     }
+  }
+
+  async _validatePeriodAvailable(id, data) {
+    if (
+      ![
+        bookingStatus.PROGRESS,
+        bookingStatus.BOOKED,
+      ].includes(data.status)
+    ) {
+      return;
+    }
+
+    if (
+      !(await this.isPeriodAvailable(
+        data.arrival,
+        data.departure,
+        id,
+      ))
+    ) {
+      throw new ValidationError(
+        this.language,
+        'entities.booking.validation.periodFull',
+      );
+    }
+  }
+
+  async isPeriodAvailable(start, end, idToExclude) {
+    const bookingsAtPeriod = await this.repository.countActiveBookingInPeriod(
+      start,
+      end,
+      idToExclude,
+    );
+
+    const capacity = (
+      await SettingsService.findOrCreateDefault(
+        this.currentUser,
+      )
+    ).capacity;
+
+    return bookingsAtPeriod < capacity;
   }
 };
