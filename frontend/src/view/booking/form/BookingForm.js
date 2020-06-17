@@ -120,13 +120,44 @@ class BookingForm extends Component {
   };
 
   statusOptions = () => {
-    const { isPetOwner } = this.props;
+    const {
+      isPetOwner,
+      isManager,
+      isEmployee,
+    } = this.props;
 
     if (isPetOwner) {
       return this.statusOptionsPetOwner();
     }
 
+    if (isEmployee) {
+      return this.statusOptionsEmployee();
+    }
+
+    if (isManager) {
+      return this.statusOptionsManager();
+    }
+  };
+
+  statusOptionsManager = () => {
     return fields.status.options;
+  };
+
+  statusOptionsEmployee = () => {
+    const { record } = this.props;
+    const options = fields.status.options;
+
+    if (!this.isEditing()) {
+      return options;
+    }
+
+    if (record.status === bookingStatus.BOOKED) {
+      return options;
+    }
+
+    return options.filter(
+      (option) => option.id !== bookingStatus.BOOKED,
+    );
   };
 
   statusOptionsPetOwner = () => {
@@ -343,6 +374,9 @@ function select(state) {
     record: selectors.selectRecord(state),
     currentUser: authSelectors.selectCurrentUser(state),
     isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
+    isEmployee: authSelectors.selectCurrentUserIsEmployee(
       state,
     ),
     isManager: authSelectors.selectCurrentUserIsManager(

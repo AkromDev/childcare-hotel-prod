@@ -139,6 +139,10 @@ module.exports = class BookingService {
     }
 
     if (existingData.status !== bookingStatus.BOOKED) {
+      if (data.status === bookingStatus.BOOKED) {
+        throw new ForbiddenError(this.language);
+      }
+
       if (data.owner !== existingData.owner.id) {
         throw new ForbiddenError(this.language);
       }
