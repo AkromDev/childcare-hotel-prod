@@ -1,6 +1,14 @@
 const en = {
   app: {
-    title: 'Pet Hotel',
+    title: '',
+  },
+
+  entities: {
+    pet: {
+      validation: {
+        bookingExists: `There is a booking for this pet, so it can't be deleted`,
+      },
+    },
   },
 
   auth: {

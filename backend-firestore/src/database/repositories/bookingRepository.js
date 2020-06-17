@@ -155,6 +155,17 @@ class BookingRepository extends AbstractEntityRepository {
 
     return record;
   }
+
+  async existsForPet(petId) {
+    const collection = await admin
+      .firestore()
+      .collection(`booking`)
+      .where('pet', '==', petId)
+      .limit(1)
+      .get();
+
+    return collection.size > 0;
+  }
 }
 
 module.exports = BookingRepository;

@@ -3,10 +3,12 @@ const ValidationError = require('../errors/validationError');
 const AbstractRepository = require('../database/repositories/abstractRepository');
 const UserRoleChecker = require('./iam/userRoleChecker');
 const ForbiddenError = require('../errors/forbiddenError');
+const BookingRepository = require('../database/repositories/bookingRepository');
 
 module.exports = class PetService {
   constructor({ currentUser, language }) {
     this.repository = new PetRepository();
+    this.bookingRepository = new BookingRepository();
     this.currentUser = currentUser;
     this.language = language;
   }
@@ -68,6 +70,10 @@ module.exports = class PetService {
     }
   }
 
+  async _validateIsSameOwner(id) {
+    await this.findById(id);
+  }
+
   async destroyAll(ids) {
     const batch = await AbstractRepository.createBatch();
 
@@ -91,10 +97,17 @@ module.exports = class PetService {
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
       await this._validateIsSameOwner(id);
     }
-  }
 
-  async _validateIsSameOwner(id) {
-    await this.findById(id);
+    const existsBookingForPet = await this.bookingRepository.existsForPet(
+      id,
+    );
+
+    if (existsBookingForPet) {
+      throw new ValidationError(
+        this.language,
+        'entities.pet.validation.bookingExists',
+      );
+    }
   }
 
   async findById(id) {

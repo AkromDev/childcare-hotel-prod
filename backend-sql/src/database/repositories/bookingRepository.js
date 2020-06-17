@@ -155,6 +155,16 @@ class BookingRepository extends AbstractEntityRepository {
       label: record.id,
     }));
   }
+
+  async existsForPet(petId) {
+    const count = await models.booking.count({
+      where: {
+        petId,
+      },
+    });
+
+    return count > 0;
+  }
 }
 
 module.exports = BookingRepository;
