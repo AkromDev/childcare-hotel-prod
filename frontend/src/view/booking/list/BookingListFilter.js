@@ -17,6 +17,7 @@ import InputRangeFormItem from 'view/shared/form/items/InputRangeFormItem';
 import UserAutocompleteFormItem from 'view/iam/autocomplete/UserAutocompleteFormItem';
 import SelectFormItem from 'view/shared/form/items/SelectFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -57,7 +58,7 @@ class BookingListFilter extends Component {
   };
 
   render() {
-    const { loading } = this.props;
+    const { loading, currentUser, isPetOwner } = this.props;
 
     return (
       <FilterWrapper>
@@ -84,18 +85,23 @@ class BookingListFilter extends Component {
                       showTime
                     />
                   </Col>
-                  <Col md={24} lg={12}>
-                    <UserAutocompleteFormItem
-                      name={fields.owner.name}
-                      label={fields.owner.label}
-                      layout={formItemLayout}
-                    />
-                  </Col>
+                  {!isPetOwner && (
+                    <Col md={24} lg={12}>
+                      <UserAutocompleteFormItem
+                        name={fields.owner.name}
+                        label={fields.owner.label}
+                        layout={formItemLayout}
+                      />
+                    </Col>
+                  )}
                   <Col md={24} lg={12}>
                     <PetAutocompleteFormItem
                       name={fields.pet.name}
                       label={fields.pet.label}
                       layout={formItemLayout}
+                      owner={
+                        isPetOwner ? currentUser.id : null
+                      }
                     />
                   </Col>
                   <Col md={24} lg={12}>
@@ -166,7 +172,13 @@ class BookingListFilter extends Component {
 function select(state) {
   return {
     filter: selectors.selectFilter(state),
+    currentUser: authSelectors.selectCurrentUser(state),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
   };
 }
 
-export default withRouter(connect(select)(BookingListFilter));
+export default withRouter(
+  connect(select)(BookingListFilter),
+);

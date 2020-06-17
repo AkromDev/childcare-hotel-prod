@@ -61,7 +61,11 @@ class Permissions {
       },
       petDestroy: {
         id: 'petDestroy',
-        allowedRoles: [roles.manager],
+        allowedRoles: [
+          roles.manager,
+          roles.employee,
+          roles.petOwner,
+        ],
         allowedStorageFolders: ['pet'],
       },
       petRead: {

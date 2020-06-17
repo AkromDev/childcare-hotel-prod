@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import TableWrapper from 'view/shared/styles/TableWrapper';
 import ButtonLink from 'view/shared/styles/ButtonLink';
 import UserListItem from 'view/iam/list/users/UserListItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -30,10 +31,10 @@ class PetListTable extends Component {
   };
 
   columns = [
-    fields.id.forTable(),
-    fields.owner.forTable({
-      render: (value) => <UserListItem value={value} />,
-    }),
+    !this.props.isPetOwner &&
+      fields.owner.forTable({
+        render: (value) => <UserListItem value={value} />,
+      }),
     fields.name.forTable(),
     fields.type.forTable(),
     fields.breed.forTable(),
@@ -68,7 +69,7 @@ class PetListTable extends Component {
         </div>
       ),
     },
-  ];
+  ].filter(Boolean);
 
   rowSelection = () => {
     return {
@@ -113,6 +114,9 @@ function select(state) {
       state,
     ),
     hasPermissionToDestroy: petSelectors.selectPermissionToDestroy(
+      state,
+    ),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
       state,
     ),
   };

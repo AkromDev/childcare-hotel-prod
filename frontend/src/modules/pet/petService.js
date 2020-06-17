@@ -155,14 +155,19 @@ export default class PetService {
     return response.data.petList;
   }
 
-  static async listAutocomplete(query, limit) {
+  static async listAutocomplete(query, owner, limit) {
     const response = await graphqlClient.query({
       query: gql`
         query PET_AUTOCOMPLETE(
           $query: String
+          $owner: String
           $limit: Int
         ) {
-          petAutocomplete(query: $query, limit: $limit) {
+          petAutocomplete(
+            query: $query
+            owner: $owner
+            limit: $limit
+          ) {
             id
             label
           }
@@ -171,6 +176,7 @@ export default class PetService {
 
       variables: {
         query,
+        owner,
         limit,
       },
     });
