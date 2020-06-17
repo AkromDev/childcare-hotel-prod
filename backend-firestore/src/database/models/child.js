@@ -9,9 +9,9 @@ module.exports = class Child extends AbstractEntityModel {
       type: new types.Enumerator(['boy', 'girl']),
       breed: new types.String(null, 255),
       size: new types.Enumerator([
-        'small',
-        'medium',
-        'large',
+        'toddler',
+        'preschooler',
+        'schoolAged',
       ]),
       bookings: new types.RelationToMany(),
       importHash: new types.String(null, 255),

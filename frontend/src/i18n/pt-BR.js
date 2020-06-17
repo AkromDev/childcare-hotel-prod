@@ -68,9 +68,9 @@ const ptBR = {
           girl: 'Cachorro',
         },
         size: {
-          small: 'Pequeno',
-          medium: 'Médio',
-          large: 'Grande',
+          toddler: 'Pequeno',
+          preschooler: 'Médio',
+          schoolAged: 'Grande',
         },
       },
       new: {

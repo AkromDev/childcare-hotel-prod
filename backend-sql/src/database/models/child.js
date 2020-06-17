@@ -31,7 +31,7 @@ module.exports = function (sequelize, DataTypes) {
       size: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['small', 'medium', 'large'],
+        values: ['toddler', 'preschooler', 'schoolAged'],
       },
       importHash: {
         type: DataTypes.STRING(255),

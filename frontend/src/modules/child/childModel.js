@@ -49,16 +49,16 @@ const fields = {
     label('size'),
     [
       {
-        id: 'small',
-        label: enumeratorLabel('size', 'small'),
+        id: 'toddler',
+        label: enumeratorLabel('size', 'toddler'),
       },
       {
-        id: 'medium',
-        label: enumeratorLabel('size', 'medium'),
+        id: 'preschooler',
+        label: enumeratorLabel('size', 'preschooler'),
       },
       {
-        id: 'large',
-        label: enumeratorLabel('size', 'large'),
+        id: 'schoolAged',
+        label: enumeratorLabel('size', 'schoolAged'),
       },
     ],
     {

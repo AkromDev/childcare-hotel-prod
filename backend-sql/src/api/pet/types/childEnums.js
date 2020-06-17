@@ -5,9 +5,9 @@ const schema = `
   }
 
   enum ChildSizeEnum {
-    small
-    medium
-    large
+    toddler
+    preschooler
+    schoolAged
   }
 `;
 
