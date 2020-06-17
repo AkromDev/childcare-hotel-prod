@@ -67,10 +67,7 @@ class BookingRepository extends AbstractEntityRepository {
       }
 
       if (filter.arrivalRange) {
-        query.appendRange(
-          'arrival',
-          filter.arrivalRange,
-        );
+        query.appendRange('arrival', filter.arrivalRange);
       }
 
       if (filter.departureRange) {
@@ -85,10 +82,7 @@ class BookingRepository extends AbstractEntityRepository {
       }
 
       if (filter.feeRange) {
-        query.appendRange(
-          'fee',
-          filter.feeRange,
-        );
+        query.appendRange('fee', filter.feeRange);
       }
 
       if (filter.createdAtRange) {
@@ -111,15 +105,14 @@ class BookingRepository extends AbstractEntityRepository {
     return { rows, count };
   }
 
-  async findAllAutocomplete(search, limit) {
+  async findAllAutocomplete(filter, limit) {
     const query = FirebaseQuery.forAutocomplete({
       limit,
       orderBy: 'id_ASC',
     });
 
-    if (search) {
-      query.appendId('id', search);
-
+    if (filter && filter.search) {
+      query.appendId('id', filter.search);
     }
 
     const collection = await admin
@@ -128,7 +121,13 @@ class BookingRepository extends AbstractEntityRepository {
       .get();
 
     const all = this.mapCollection(collection);
-    const rows = query.rows(all);
+    let rows = query.rows(all);
+
+    if (filter && filter.owner) {
+      rows = rows.filter(
+        (row) => row.owner === filter.owner,
+      );
+    }
 
     return rows.map((record) => ({
       id: record.id,
@@ -147,10 +146,7 @@ class BookingRepository extends AbstractEntityRepository {
       return record;
     }
 
-    record.pet = await this.findRelation(
-      'pet',
-      record.pet,
-    );
+    record.pet = await this.findRelation('pet', record.pet);
 
     record.owner = await this.findRelation(
       'user',
