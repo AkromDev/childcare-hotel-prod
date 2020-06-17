@@ -5,12 +5,12 @@ import DateTimeRangeField from 'modules/shared/fields/dateTimeRangeField';
 import StringField from 'modules/shared/fields/stringField';
 import EnumeratorField from 'modules/shared/fields/enumeratorField';
 import DecimalRangeField from 'modules/shared/fields/decimalRangeField';
-import DecimalField from 'modules/shared/fields/decimalField';
 import RelationToOneField from 'modules/shared/fields/relationToOneField';
 import FilesField from 'modules/shared/fields/filesField';
 import ImagesField from 'modules/shared/fields/imagesField';
 import bookingStatus from 'modules/booking/bookingStatus';
 import BookingPeriodField from 'modules/booking/bookingPeriodField';
+import MoneyField from 'modules/shared/fields/moneyField';
 
 function label(name) {
   return i18n(`entities.booking.fields.${name}`);
@@ -111,7 +111,7 @@ const fields = {
       max: 20000,
     },
   ),
-  fee: new DecimalField('fee', label('fee'), {
+  fee: new MoneyField('fee', label('fee'), {
     scale: 2,
   }),
   receipt: new FilesField(

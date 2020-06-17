@@ -17,11 +17,19 @@ const selectSaveLoading = createSelector(
   (raw) => !!raw.saveLoading,
 );
 
+const selectDailyFee = createSelector(
+  [selectSettings],
+  (settings) => {
+    return settings && settings.dailyFee;
+  },
+);
+
 const selectors = {
   selectFindLoading,
   selectSaveLoading,
   selectSettings,
   selectRaw,
+  selectDailyFee,
 };
 
 export default selectors;
