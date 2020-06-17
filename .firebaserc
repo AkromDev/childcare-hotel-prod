@@ -1,6 +1,6 @@
 {
   "projects": {
-    "development": "<insert project id here>",
-    "production": "<insert project id here>"
+    "development": "childcare-hotel-app-prod",
+    "production": "childcare-hotel-app-prod"
   }
 }
