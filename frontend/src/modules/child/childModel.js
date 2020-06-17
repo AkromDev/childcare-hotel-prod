@@ -40,10 +40,10 @@ const fields = {
       required: true,
     },
   ),
-  breed: new StringField('breed', label('breed'), {
-    required: true,
-    max: 255,
-  }),
+  // breed: new StringField('breed', label('breed'), {
+  //   required: true,
+  //   max: 255,
+  // }),
   size: new EnumeratorField(
     'size',
     label('size'),

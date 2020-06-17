@@ -34,10 +34,10 @@ class ChildView extends Component {
           value={fields.type.forView(record.type)}
         />
 
-        <TextViewItem
+        {/* <TextViewItem
           label={fields.breed.label}
           value={fields.breed.forView(record.breed)}
-        />
+        /> */}
 
         <TextViewItem
           label={fields.size.label}

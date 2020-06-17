@@ -55,7 +55,7 @@ const en = {
         owner: 'Owner',
         name: 'Name',
         type: 'Gender',
-        breed: 'Breed',
+        // breed: 'Breed',
         size: 'Age Group',
         bookings: 'Bookings',
         createdAt: 'Created at',

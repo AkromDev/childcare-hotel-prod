@@ -91,7 +91,7 @@ export default class ChildService {
             }
             name
             type
-            breed
+            # breed
             size
             bookings {
               id
@@ -138,7 +138,7 @@ export default class ChildService {
               }
               name
               type
-              breed
+              # breed
               size
               updatedAt
               createdAt

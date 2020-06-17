@@ -3,11 +3,11 @@ const schema = `
     owner: String!
     name: String!
     type: ChildTypeEnum!
-    breed: String!
     size: ChildSizeEnum!
     bookings: [ String! ]
   }
-`;
+  `;
+// breed: String!
 
 const resolver = {};
 

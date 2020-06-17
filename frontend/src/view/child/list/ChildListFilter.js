@@ -24,7 +24,7 @@ const schema = new FormFilterSchema([
   fields.owner,
   fields.name,
   fields.type,
-  fields.breed,
+  // fields.breed,
   fields.size,
   fields.createdAtRange,
 ]);
@@ -96,13 +96,13 @@ class ChildListFilter extends Component {
                       layout={formItemLayout}
                     />
                   </Col>
-                  <Col md={24} lg={12}>
+                  {/* <Col md={24} lg={12}>
                     <InputFormItem
                       name={fields.breed.name}
                       label={fields.breed.label}
                       layout={formItemLayout}
                     />
-                  </Col>
+                  </Col> */}
                   <Col md={24} lg={12}>
                     <SelectFormItem
                       name={fields.size.name}

@@ -55,7 +55,7 @@ const ptBR = {
         owner: 'Dono',
         name: 'Nome',
         type: 'Tipo',
-        breed: 'Raça',
+        // breed: 'Raça',
         size: 'Tamanho',
         bookings: 'Reservas',
         createdAt: 'Criado em',
