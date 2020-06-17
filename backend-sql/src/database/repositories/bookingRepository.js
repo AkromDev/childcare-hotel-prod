@@ -21,10 +21,7 @@ class BookingRepository extends AbstractEntityRepository {
       'createdAt',
     ];
 
-    const fileAttributes = [
-      'photos',
-      'receipt',
-    ];
+    const fileAttributes = ['photos', 'receipt'];
 
     const relationToOneAttributes = {
       owner: {
@@ -37,9 +34,7 @@ class BookingRepository extends AbstractEntityRepository {
       },
     };
 
-    const relationToManyAttributes = {
-
-    };
+    const relationToManyAttributes = {};
 
     super(
       modelName,
@@ -98,14 +93,14 @@ class BookingRepository extends AbstractEntityRepository {
       }
 
       if (filter.status) {
-        sequelizeFilter.appendEqual('status', filter.status);
+        sequelizeFilter.appendEqual(
+          'status',
+          filter.status,
+        );
       }
 
       if (filter.feeRange) {
-        sequelizeFilter.appendRange(
-          'fee',
-          filter.feeRange,
-        );
+        sequelizeFilter.appendRange('fee', filter.feeRange);
       }
 
       if (filter.createdAtRange) {
@@ -128,19 +123,29 @@ class BookingRepository extends AbstractEntityRepository {
     );
   }
 
-  async findAllAutocomplete(query, limit) {
-    const filter = new SequelizeAutocompleteFilter(
+  async findAllAutocomplete(filter, limit) {
+    const sequelizeFilter = new SequelizeAutocompleteFilter(
       models.Sequelize,
     );
 
-    if (query) {
-      filter.appendId('id', query);
+    if (filter && filter.query) {
+      sequelizeFilter.appendId('id', filter.query);
+    }
 
+    let where = sequelizeFilter.getWhere();
+
+    if (filter && filter.owner) {
+      where = {
+        ...where,
+        [models.Sequelize.Op.and]: {
+          ownerId: filter.owner,
+        },
+      };
     }
 
     const records = await models[this.modelName].findAll({
-      attributes: ['id', 'id'],
-      where: filter.getWhere(),
+      attributes: ['id'],
+      where,
       limit: limit || undefined,
       orderBy: [['id', 'ASC']],
     });
