@@ -1,6 +1,6 @@
 const en = {
   app: {
-    title: 'Child Care Hotel',
+    title: 'Childcare Center',
   },
 
   entities: {
@@ -15,7 +15,7 @@ const en = {
           'Departure date must be after the arrival date',
         periodPast: 'The period must be in the future',
         periodFull:
-          'Sorry, the Child Care Hotel is full at this time',
+          'Sorry, the Childcare Center is full at this time',
       },
     },
   },
