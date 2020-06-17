@@ -22,7 +22,7 @@ const en = {
   },
 
   app: {
-    title: 'Child Hotel',
+    title: 'Child Care Hotel',
   },
 
   entities: {
@@ -155,7 +155,7 @@ const en = {
       validation: {
         periodPast: 'The period must be in the future',
         periodFull:
-          'Sorry, the Child Hotel is full at this time',
+          'Sorry, the Child Care Hotel is full at this time',
       },
     },
   },
