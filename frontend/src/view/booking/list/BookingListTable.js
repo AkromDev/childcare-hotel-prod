@@ -1,4 +1,4 @@
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, Tag } from 'antd';
 import { i18n } from 'i18n';
 import actions from 'modules/booking/list/bookingListActions';
 import destroyActions from 'modules/booking/destroy/bookingDestroyActions';
@@ -15,6 +15,7 @@ import UserListItem from 'view/iam/list/users/UserListItem';
 import FilesListView from 'view/shared/list/FileListView';
 import PetListItem from 'view/pet/list/PetListItem';
 import authSelectors from 'modules/auth/authSelectors';
+import { bookingStatusColor } from 'modules/booking/bookingStatus';
 
 const { fields } = model;
 
@@ -43,7 +44,13 @@ class BookingListTable extends Component {
     }),
     fields.arrival.forTable(),
     fields.departure.forTable(),
-    fields.status.forTable(),
+    fields.status.forTable({
+      render: (value) => (
+        <Tag color={bookingStatusColor(value)}>
+          {fields.status.forView(value)}
+        </Tag>
+      ),
+    }),
     fields.fee.forTable(),
     fields.receipt.forTable({
       render: (value) => <FilesListView value={value} />,
