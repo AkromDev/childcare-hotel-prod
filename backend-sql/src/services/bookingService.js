@@ -1,4 +1,5 @@
 const BookingRepository = require('../database/repositories/bookingRepository');
+const PetRepository = require('../database/repositories/petRepository');
 const ValidationError = require('../errors/validationError');
 const AbstractRepository = require('../database/repositories/abstractRepository');
 const UserRoleChecker = require('./iam/userRoleChecker');
@@ -8,6 +9,7 @@ const bookingStatus = require('../enumerators/bookingStatus');
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
     this.repository = new BookingRepository();
+    this.petRepository = new PetRepository();
     this.currentUser = currentUser;
     this.language = language;
   }
@@ -46,6 +48,16 @@ module.exports = class BookingService {
         throw new ForbiddenError(this.language);
       }
     }
+
+    await this._validatePetAndOwnerMatch(data);
+  }
+
+  async _validatePetAndOwnerMatch(data) {
+    const pet = await this.petRepository.findById(data.pet);
+
+    if (pet.owner.id !== data.owner) {
+      throw new ForbiddenError(this.language);
+    }
   }
 
   async update(id, data) {
@@ -80,19 +92,49 @@ module.exports = class BookingService {
     const existingData = await this.findById(id);
 
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
-      data.owner = this.currentUser.id;
-      await this._validateIsSameOwner(id);
+      await this._validateUpdateForPetOwner(
+        id,
+        data,
+        existingData,
+      );
+    }
 
-      if (existingData.status !== bookingStatus.BOOKED) {
+    if (UserRoleChecker.isEmployee(this.currentUser)) {
+      await this._validateUpdateForEmployee(
+        id,
+        data,
+        existingData,
+      );
+    }
+
+    await this._validatePetAndOwnerMatch(data);
+  }
+
+  async _validateUpdateForPetOwner(id, data, existingData) {
+    data.owner = this.currentUser.id;
+    await this._validateIsSameOwner(id);
+
+    if (existingData.status !== bookingStatus.BOOKED) {
+      throw new ForbiddenError(this.language);
+    }
+
+    if (
+      ![
+        bookingStatus.CANCELLED,
+        bookingStatus.BOOKED,
+      ].includes(data.status)
+    ) {
+      throw new ForbiddenError(this.language);
+    }
+  }
+
+  async _validateUpdateForEmployee(id, data, existingData) {
+    if (existingData.status !== bookingStatus.BOOKED) {
+      if (data.owner !== existingData.owner.id) {
         throw new ForbiddenError(this.language);
       }
 
-      if (
-        ![
-          bookingStatus.CANCELLED,
-          bookingStatus.BOOKED,
-        ].includes(data.status)
-      ) {
+      if (data.pet !== existingData.pet.id) {
         throw new ForbiddenError(this.language);
       }
     }

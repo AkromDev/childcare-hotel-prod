@@ -22,6 +22,8 @@ import FilesFormItem from 'view/shared/form/items/FilesFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
 import authSelectors from 'modules/auth/authSelectors';
 import bookingStatus from 'modules/booking/bookingStatus';
+import UserViewItem from 'view/iam/view/UserViewItem';
+import PetViewItem from 'view/pet/view/PetViewItem';
 
 const { fields } = model;
 
@@ -51,8 +53,55 @@ class BookingForm extends Component {
   }
 
   isOwnerEnabled = () => {
-    const { isPetOwner } = this.props;
-    return !isPetOwner;
+    const { isPetOwner, isManager, record } = this.props;
+
+    if (isManager) {
+      return true;
+    }
+
+    if (isPetOwner) {
+      return false;
+    }
+
+    if (!this.isEditing()) {
+      return true;
+    }
+
+    if (!record || !record.status) {
+      return false;
+    }
+
+    return record.status === bookingStatus.BOOKED;
+  };
+
+  isOwnerVisible = () => {
+    return !this.isOwnerEnabled() && this.props.record;
+  };
+
+  isPetEnabled = (form) => {
+    if (!form.values.owner) {
+      return false;
+    }
+
+    if (!this.isEditing()) {
+      return true;
+    }
+
+    const { record, isManager } = this.props;
+
+    if (isManager) {
+      return true;
+    }
+
+    if (!record || !record.status) {
+      return false;
+    }
+
+    return record.status === bookingStatus.BOOKED;
+  };
+
+  isPetVisible = (form) => {
+    return !this.isPetEnabled(form) && form.values.pet;
   };
 
   isEditing = () => {
@@ -119,7 +168,7 @@ class BookingForm extends Component {
   };
 
   renderForm() {
-    const { saveLoading } = this.props;
+    const { saveLoading, record } = this.props;
 
     return (
       <FormWrapper>
@@ -144,16 +193,36 @@ class BookingForm extends Component {
                     required={fields.owner.required}
                   />
                 )}
-                <PetAutocompleteFormItem
-                  name={fields.pet.name}
-                  label={fields.pet.label}
-                  required={fields.pet.required}
-                  owner={
-                    form.values.owner
-                      ? form.values.owner.id
-                      : null
-                  }
-                />
+
+                {this.isOwnerVisible() && (
+                  <UserViewItem
+                    label={fields.owner.label}
+                    value={fields.owner.forView(
+                      record.owner,
+                    )}
+                  />
+                )}
+
+                {this.isPetEnabled(form) && (
+                  <PetAutocompleteFormItem
+                    name={fields.pet.name}
+                    label={fields.pet.label}
+                    required={fields.pet.required}
+                    owner={
+                      form.values.owner
+                        ? form.values.owner.id
+                        : null
+                    }
+                  />
+                )}
+
+                {this.isPetVisible(form) && (
+                  <PetViewItem
+                    label={fields.pet.label}
+                    value={fields.pet.forView(record.pet)}
+                  />
+                )}
+
                 <DatePickerFormItem
                   name={fields.arrival.name}
                   label={fields.arrival.label}
@@ -274,6 +343,9 @@ function select(state) {
     record: selectors.selectRecord(state),
     currentUser: authSelectors.selectCurrentUser(state),
     isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
+    isManager: authSelectors.selectCurrentUserIsManager(
       state,
     ),
   };
