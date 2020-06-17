@@ -40,7 +40,9 @@ class AuthUserWriter {
           authUser.email.split('@')[0],
         email: authUser.email,
         authenticationUid: authUser.uid,
-        roles: isFirstUser ? [Roles.values.manager] : [],
+        roles: isFirstUser
+          ? [Roles.values.manager]
+          : [Roles.values.petOwner],
       },
     );
 
