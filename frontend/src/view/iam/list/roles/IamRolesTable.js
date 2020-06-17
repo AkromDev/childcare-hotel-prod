@@ -80,7 +80,8 @@ class IamRolesTable extends Component {
         return (
           <div className="table-actions">
             {view}
-            {this.props.hasPermissionToEdit && edit}
+            {this.props.hasPermissionToEditRecord(record) &&
+              edit}
           </div>
         );
       },
@@ -127,7 +128,7 @@ function select(state) {
     pagination: selectors.selectPagination(state),
     filter: selectors.selectFilter(state),
     selectedKeys: selectors.selectSelectedKeys(state),
-    hasPermissionToEdit: iamSelectors.selectPermissionToEdit(
+    hasPermissionToEditRecord: iamSelectors.selectPermissionToEditRecord(
       state,
     ),
   };

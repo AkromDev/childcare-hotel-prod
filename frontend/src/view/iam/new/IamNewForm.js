@@ -14,6 +14,8 @@ import FormSchema from 'view/shared/form/formSchema';
 import FormWrapper, {
   tailFormItemLayout,
 } from 'view/shared/styles/FormWrapper';
+import authSelectors from 'modules/auth/authSelectors';
+import Roles from 'security/roles';
 
 const { fields } = model;
 
@@ -45,13 +47,24 @@ class IamNewForm extends Component {
     );
   }
 
+  initialValues = () => {
+    const { isManager } = this.props;
+    const initialValues = this.schema.initialValues();
+
+    if (!isManager) {
+      initialValues.roles = [Roles.values.petOwner];
+    }
+
+    return initialValues;
+  };
+
   render() {
-    const { saveLoading } = this.props;
+    const { saveLoading, isManager } = this.props;
 
     return (
       <FormWrapper>
         <Formik
-          initialValues={this.schema.initialValues()}
+          initialValues={this.initialValues()}
           validationSchema={this.schema.schema}
           onSubmit={this.handleSubmit}
           render={(form) => {
@@ -97,13 +110,15 @@ class IamNewForm extends Component {
                   </React.Fragment>
                 )}
 
-                <SelectFormItem
-                  name={fields.rolesRequired.name}
-                  label={fields.rolesRequired.label}
-                  required={fields.rolesRequired.required}
-                  options={fields.roles.options}
-                  mode="multiple"
-                />
+                {isManager && (
+                  <SelectFormItem
+                    name={fields.rolesRequired.name}
+                    label={fields.rolesRequired.label}
+                    required={fields.rolesRequired.required}
+                    options={fields.roles.options}
+                    mode="multiple"
+                  />
+                )}
 
                 <Form.Item
                   className="form-buttons"
@@ -138,6 +153,9 @@ class IamNewForm extends Component {
 function select(state) {
   return {
     saveLoading: selectors.selectSaveLoading(state),
+    isManager: authSelectors.selectCurrentUserIsManager(
+      state,
+    ),
   };
 }
 

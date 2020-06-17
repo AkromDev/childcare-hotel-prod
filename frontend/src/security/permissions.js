@@ -15,14 +15,18 @@ class Permissions {
       },
       iamImport: {
         id: 'iamImport',
-        allowedRoles: [
-          roles.manager,
-          roles.iamSecurityReviewer,
-          roles.editor,
-        ],
+        allowedRoles: [roles.manager],
       },
       iamRead: {
         id: 'iamRead',
+        allowedRoles: [roles.manager, roles.employee],
+      },
+      iamChangeStatus: {
+        id: 'iamChangeStatus',
+        allowedRoles: [roles.manager],
+      },
+      iamRemove: {
+        id: 'iamRemove',
         allowedRoles: [roles.manager],
       },
       iamUserAutocomplete: {

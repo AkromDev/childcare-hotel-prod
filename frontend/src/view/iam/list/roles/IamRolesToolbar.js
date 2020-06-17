@@ -29,10 +29,10 @@ class IamRolesToolbar extends Component {
     const {
       selectedKeys,
       loading,
-      hasPermissionToEdit,
+      hasPermissionToRemove,
     } = this.props;
 
-    if (!hasPermissionToEdit) {
+    if (!hasPermissionToRemove) {
       return null;
     }
 
@@ -64,10 +64,10 @@ class IamRolesToolbar extends Component {
     const {
       selectedKeys,
       loading,
-      hasPermissionToEdit,
+      hasPermissionToChangeStatus,
     } = this.props;
 
-    if (!hasPermissionToEdit) {
+    if (!hasPermissionToChangeStatus) {
       return null;
     }
 
@@ -99,10 +99,10 @@ class IamRolesToolbar extends Component {
     const {
       selectedKeys,
       loading,
-      hasPermissionToEdit,
+      hasPermissionToChangeStatus,
     } = this.props;
 
-    if (!hasPermissionToEdit) {
+    if (!hasPermissionToChangeStatus) {
       return null;
     }
 
@@ -172,13 +172,16 @@ function select(state) {
     hasPermissionToAuditLogs: auditLogSelectors.selectPermissionToRead(
       state,
     ),
-    hasPermissionToEdit: iamSelectors.selectPermissionToEdit(
-      state,
-    ),
     hasPermissionToCreate: iamSelectors.selectPermissionToCreate(
       state,
     ),
     hasPermissionToImport: iamSelectors.selectPermissionToImport(
+      state,
+    ),
+    hasPermissionToChangeStatus: iamSelectors.selectPermissionToChangeStatus(
+      state,
+    ),
+    hasPermissionToRemove: iamSelectors.selectPermissionToRemove(
       state,
     ),
   };

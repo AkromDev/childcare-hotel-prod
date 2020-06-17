@@ -51,9 +51,6 @@ function select(state) {
     hasPermissionToAuditLogs: auditLogSelectors.selectPermissionToRead(
       state,
     ),
-    hasPermissionToEdit: iamSelectors.selectPermissionToEdit(
-      state,
-    ),
   };
 }
 
