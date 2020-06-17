@@ -20,6 +20,7 @@ import DatePickerFormItem from 'view/shared/form/items/DatePickerFormItem';
 import ImagesFormItem from 'view/shared/form/items/ImagesFormItem';
 import FilesFormItem from 'view/shared/form/items/FilesFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -48,6 +49,11 @@ class BookingForm extends Component {
     }
   }
 
+  isOwnerEnabled = () => {
+    const { isPetOwner } = this.props;
+    return !isPetOwner;
+  };
+
   isEditing = () => {
     const { match } = this.props;
     return !!match.params.id;
@@ -71,7 +77,13 @@ class BookingForm extends Component {
       return this.schema.initialValues(record);
     }
 
-    return this.schema.initialValues();
+    const initialValues = {};
+
+    if (this.props.isPetOwner) {
+      initialValues.owner = this.props.currentUser;
+    }
+
+    return this.schema.initialValues(initialValues);
   };
 
   renderForm() {
@@ -93,15 +105,22 @@ class BookingForm extends Component {
                   />
                 )}
 
-                <UserAutocompleteFormItem
-                  name={fields.owner.name}
-                  label={fields.owner.label}
-                  required={fields.owner.required}
-                />
+                {this.isOwnerEnabled() && (
+                  <UserAutocompleteFormItem
+                    name={fields.owner.name}
+                    label={fields.owner.label}
+                    required={fields.owner.required}
+                  />
+                )}
                 <PetAutocompleteFormItem
                   name={fields.pet.name}
                   label={fields.pet.label}
                   required={fields.pet.required}
+                  owner={
+                    form.values.owner
+                      ? form.values.owner.id
+                      : null
+                  }
                 />
                 <DatePickerFormItem
                   name={fields.arrival.name}
@@ -149,7 +168,9 @@ class BookingForm extends Component {
                 <TextAreaFormItem
                   name={fields.cancellationNotes.name}
                   label={fields.cancellationNotes.label}
-                  required={fields.cancellationNotes.required}
+                  required={
+                    fields.cancellationNotes.required
+                  }
                 />
                 <InputFormItem
                   name={fields.fee.name}
@@ -217,6 +238,10 @@ function select(state) {
     findLoading: selectors.selectFindLoading(state),
     saveLoading: selectors.selectSaveLoading(state),
     record: selectors.selectRecord(state),
+    currentUser: authSelectors.selectCurrentUser(state),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
   };
 }
 

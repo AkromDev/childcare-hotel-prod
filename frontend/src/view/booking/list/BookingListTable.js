@@ -14,6 +14,7 @@ import ButtonLink from 'view/shared/styles/ButtonLink';
 import UserListItem from 'view/iam/list/users/UserListItem';
 import FilesListView from 'view/shared/list/FileListView';
 import PetListItem from 'view/pet/list/PetListItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -33,9 +34,10 @@ class BookingListTable extends Component {
 
   columns = [
     fields.id.forTable(),
-    fields.owner.forTable({
-      render: (value) => <UserListItem value={value} />,
-    }),
+    !this.props.isPetOwner &&
+      fields.owner.forTable({
+        render: (value) => <UserListItem value={value} />,
+      }),
     fields.pet.forTable({
       render: (value) => <PetListItem value={value} />,
     }),
@@ -76,7 +78,7 @@ class BookingListTable extends Component {
         </div>
       ),
     },
-  ];
+  ].filter(Boolean);
 
   rowSelection = () => {
     return {
@@ -121,6 +123,9 @@ function select(state) {
       state,
     ),
     hasPermissionToDestroy: bookingSelectors.selectPermissionToDestroy(
+      state,
+    ),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
       state,
     ),
   };
