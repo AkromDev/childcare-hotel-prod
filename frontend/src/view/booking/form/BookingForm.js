@@ -119,6 +119,30 @@ class BookingForm extends Component {
     return !isPetOwner;
   };
 
+  isEmployeeNotesAndPhotosEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.PROGRESS;
+  };
+
+  isCancellationNotesEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.CANCELLED;
+  };
+
+  isReceiptEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.COMPLETED;
+  };
+
   statusOptions = () => {
     const {
       isPetOwner,
@@ -271,21 +295,29 @@ class BookingForm extends Component {
                   label={fields.clientNotes.label}
                   required={fields.clientNotes.required}
                 />
-                <TextAreaFormItem
-                  name={fields.employeeNotes.name}
-                  label={fields.employeeNotes.label}
-                  required={fields.employeeNotes.required}
-                />
-                <ImagesFormItem
-                  name={fields.photos.name}
-                  label={fields.photos.label}
-                  required={fields.photos.required}
-                  path={fields.photos.path}
-                  schema={{
-                    size: fields.photos.size,
-                  }}
-                  max={fields.photos.max}
-                />
+                {this.isEmployeeNotesAndPhotosEnabled(
+                  form,
+                ) && (
+                  <React.Fragment>
+                    <TextAreaFormItem
+                      name={fields.employeeNotes.name}
+                      label={fields.employeeNotes.label}
+                      required={
+                        fields.employeeNotes.required
+                      }
+                    />
+                    <ImagesFormItem
+                      name={fields.photos.name}
+                      label={fields.photos.label}
+                      required={fields.photos.required}
+                      path={fields.photos.path}
+                      schema={{
+                        size: fields.photos.size,
+                      }}
+                      max={fields.photos.max}
+                    />
+                  </React.Fragment>
+                )}
                 {this.isStatusEnabled() && (
                   <SelectFormItem
                     name={fields.status.name}
@@ -299,29 +331,33 @@ class BookingForm extends Component {
                     required={fields.status.required}
                   />
                 )}
-                <TextAreaFormItem
-                  name={fields.cancellationNotes.name}
-                  label={fields.cancellationNotes.label}
-                  required={
-                    fields.cancellationNotes.required
-                  }
-                />
+                {this.isCancellationNotesEnabled(form) && (
+                  <TextAreaFormItem
+                    name={fields.cancellationNotes.name}
+                    label={fields.cancellationNotes.label}
+                    required={
+                      fields.cancellationNotes.required
+                    }
+                  />
+                )}
                 <InputFormItem
                   name={fields.fee.name}
                   label={fields.fee.label}
                   required={fields.fee.required}
                 />
-                <FilesFormItem
-                  name={fields.receipt.name}
-                  label={fields.receipt.label}
-                  required={fields.receipt.required}
-                  path={fields.receipt.path}
-                  schema={{
-                    size: fields.receipt.size,
-                    formats: fields.receipt.formats,
-                  }}
-                  max={fields.receipt.max}
-                />
+                {this.isReceiptEnabled(form) && (
+                  <FilesFormItem
+                    name={fields.receipt.name}
+                    label={fields.receipt.label}
+                    required={fields.receipt.required}
+                    path={fields.receipt.path}
+                    schema={{
+                      size: fields.receipt.size,
+                      formats: fields.receipt.formats,
+                    }}
+                    max={fields.receipt.max}
+                  />
+                )}
 
                 <Form.Item
                   className="form-buttons"
