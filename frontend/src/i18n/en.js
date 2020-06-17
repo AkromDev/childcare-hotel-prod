@@ -130,6 +130,7 @@ const en = {
         createdAt: 'Created at',
         updatedAt: 'Updated at',
         createdAtRange: 'Created at',
+        period: 'Period',
       },
       enumerators: {
         status: {
@@ -150,6 +151,9 @@ const en = {
         fileName: 'booking_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
+      },
+      validation: {
+        periodPast: 'The period must be in the future',
       },
     },
   },

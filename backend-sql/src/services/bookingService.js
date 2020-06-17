@@ -5,6 +5,7 @@ const AbstractRepository = require('../database/repositories/abstractRepository'
 const UserRoleChecker = require('./iam/userRoleChecker');
 const ForbiddenError = require('../errors/forbiddenError');
 const bookingStatus = require('../enumerators/bookingStatus');
+const moment = require('moment');
 
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
@@ -39,6 +40,8 @@ module.exports = class BookingService {
   }
 
   async _validateCreate(data) {
+    await this._validatePeriodFuture(data);
+
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
       if (data.owner !== this.currentUser.id) {
         throw new ForbiddenError(this.language);
@@ -89,6 +92,8 @@ module.exports = class BookingService {
   }
 
   async _validateUpdate(id, data) {
+    await this._validatePeriodFuture(data);
+
     const existingData = await this.findById(id);
 
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
@@ -253,5 +258,27 @@ module.exports = class BookingService {
     });
 
     return count > 0;
+  }
+
+  async _validatePeriodFuture(data) {
+    const { arrival, departure, status } = data;
+
+    if (status !== bookingStatus.BOOKED) {
+      return;
+    }
+
+    if (moment(arrival).isAfter(departure)) {
+      throw new ValidationError(
+        this.language,
+        'entities.booking.validation.arrivalAfterDeparture',
+      );
+    }
+
+    if (moment().isAfter(arrival)) {
+      throw new ValidationError(
+        this.language,
+        'entities.booking.validation.periodPast',
+      );
+    }
   }
 };

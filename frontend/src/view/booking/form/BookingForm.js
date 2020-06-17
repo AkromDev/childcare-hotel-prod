@@ -24,6 +24,7 @@ import authSelectors from 'modules/auth/authSelectors';
 import bookingStatus from 'modules/booking/bookingStatus';
 import UserViewItem from 'view/iam/view/UserViewItem';
 import PetViewItem from 'view/pet/view/PetViewItem';
+import DatePickerRangeFormItem from 'view/shared/form/items/DatePickerRangeFormItem';
 
 const { fields } = model;
 
@@ -40,6 +41,7 @@ class BookingForm extends Component {
     fields.cancellationNotes,
     fields.fee,
     fields.receipt,
+    fields.period,
   ]);
 
   componentDidMount() {
@@ -196,6 +198,7 @@ class BookingForm extends Component {
   handleSubmit = (values) => {
     const { dispatch } = this.props;
     const { id, ...data } = this.schema.cast(values);
+    delete data.period;
 
     if (this.isEditing()) {
       dispatch(actions.doUpdate(id, data));
@@ -208,6 +211,7 @@ class BookingForm extends Component {
     const record = this.props.record;
 
     if (this.isEditing() && record) {
+      record.period = [record.arrival, record.departure];
       return this.schema.initialValues(record);
     }
 
@@ -221,6 +225,13 @@ class BookingForm extends Component {
 
     return this.schema.initialValues(initialValues);
   };
+
+  onPeriodChange(value, form) {
+    form.setFieldTouched('period');
+    form.setFieldValue('period', value);
+    form.setFieldValue('arrival', value[0]);
+    form.setFieldValue('departure', value[1]);
+  }
 
   renderForm() {
     const { saveLoading, record } = this.props;
@@ -278,18 +289,18 @@ class BookingForm extends Component {
                   />
                 )}
 
-                <DatePickerFormItem
-                  name={fields.arrival.name}
-                  label={fields.arrival.label}
-                  required={fields.arrival.required}
+                <DatePickerRangeFormItem
+                  name={fields.period.name}
+                  label={fields.period.label}
+                  required={fields.period.required}
                   showTime
+                  inputProps={{
+                    onChange: (value) => {
+                      this.onPeriodChange(value, form);
+                    },
+                  }}
                 />
-                <DatePickerFormItem
-                  name={fields.departure.name}
-                  label={fields.departure.label}
-                  required={fields.departure.required}
-                  showTime
-                />
+
                 <TextAreaFormItem
                   name={fields.clientNotes.name}
                   label={fields.clientNotes.label}

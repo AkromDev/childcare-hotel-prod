@@ -10,6 +10,7 @@ import RelationToOneField from 'modules/shared/fields/relationToOneField';
 import FilesField from 'modules/shared/fields/filesField';
 import ImagesField from 'modules/shared/fields/imagesField';
 import bookingStatus from 'modules/booking/bookingStatus';
+import BookingPeriodField from 'modules/booking/bookingPeriodField';
 
 function label(name) {
   return i18n(`entities.booking.fields.${name}`);
@@ -32,6 +33,11 @@ const fields = {
   arrival: new DateTimeField('arrival', label('arrival'), {
     required: true,
   }),
+  period: new BookingPeriodField(
+    'period',
+    label('period'),
+    { required: true },
+  ),
   departure: new DateTimeField(
     'departure',
     label('departure'),

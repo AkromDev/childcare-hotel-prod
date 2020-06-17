@@ -9,6 +9,13 @@ const en = {
         bookingExists: `There is a booking for this pet, so it can't be deleted`,
       },
     },
+    booking: {
+      validation: {
+        arrivalAfterDeparture:
+          'Departure date must be after the arrival date',
+        periodPast: 'The period must be in the future',
+      },
+    },
   },
 
   auth: {
