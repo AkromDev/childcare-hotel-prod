@@ -188,49 +188,17 @@ const en = {
   },
 
   roles: {
-    owner: {
-      label: 'Owner',
+    manager: {
+      label: 'Manager',
       description: 'Full access to all resources',
     },
-    editor: {
-      label: 'Editor',
-      description: 'Edit access to all resources',
+    employee: {
+      label: 'Employee',
+      description: 'Employee access',
     },
-    viewer: {
-      label: 'Viewer',
-      description: 'View access to all resources',
-    },
-    auditLogViewer: {
-      label: 'Audit Log Viewer',
-      description: 'Access to view audit logs',
-    },
-    iamSecurityReviewer: {
-      label: 'Security Reviewer',
-      description: `Full access to manage users roles`,
-    },
-    entityEditor: {
-      label: 'Entity Editor',
-      description: 'Edit access to all entities',
-    },
-    entityViewer: {
-      label: 'Entity Viewer',
-      description: 'View access to all entities',
-    },
-    petEditor: {
-      label: 'pet Editor',
-      description: 'Edit access to pet',
-    },
-    petViewer: {
-      label: 'pet Viewer',
-      description: 'View access to pet',
-    },
-    bookingEditor: {
-      label: 'booking Editor',
-      description: 'Edit access to booking',
-    },
-    bookingViewer: {
-      label: 'booking Viewer',
-      description: 'View access to booking',
+    petOwner: {
+      label: 'Pet Owner',
+      description: 'Pet owner access',
     },
   },
 

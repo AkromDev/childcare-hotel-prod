@@ -4,17 +4,9 @@ import _values from 'lodash/values';
 class Roles {
   static get values() {
     return {
-      owner: 'owner',
-      editor: 'editor',
-      viewer: 'viewer',
-      auditLogViewer: 'auditLogViewer',
-      iamSecurityReviewer: 'iamSecurityReviewer',
-      entityEditor: 'entityEditor',
-      entityViewer: 'entityViewer',
-      petEditor: 'petEditor',
-      petViewer: 'petViewer',
-      bookingEditor: 'bookingEditor',
-      bookingViewer: 'bookingViewer',
+      manager: 'manager',
+      employee: 'employee',
+      petOwner: 'petOwner',
     };
   }
 
