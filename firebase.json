@@ -10,7 +10,7 @@
     ]
   },
   "functions": {
-    "source": "backend-sql"
+    "source": "backend-firestore"
   },
   "storage": {
     "rules": "storage.rules"
