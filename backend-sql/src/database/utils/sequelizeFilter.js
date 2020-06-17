@@ -85,6 +85,25 @@ module.exports = class SequelizeFilterWhere {
     }
   }
 
+  appendOverlap(columnStart, columnEnd, value) {
+    const [start, end] = value;
+    const { Op } = this.Sequelize;
+
+    if (start) {
+      this.whereAnd.push({
+        [columnEnd]: {
+          [Op.gte]: start,
+        },
+      });
+    }
+
+    if (end) {
+      this.whereAnd.push({
+        [columnStart]: { [Op.lte]: end },
+      });
+    }
+  }
+
   reset() {
     this.include = [];
     this.whereAnd = [];

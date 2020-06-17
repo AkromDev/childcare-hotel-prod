@@ -81,6 +81,28 @@ module.exports = class FirebaseQuery {
           .toLowerCase()
           .includes(search.toLowerCase());
       },
+      lessThanOrEqual: (search) => (value) => {
+        if (!search) {
+          return false;
+        }
+
+        if (!value) {
+          return false;
+        }
+
+        return search <= value;
+      },
+      greaterThanOrEqual: (search) => (value) => {
+        if (!search) {
+          return false;
+        }
+
+        if (!value) {
+          return false;
+        }
+
+        return search >= value;
+      },
     };
   }
 
@@ -117,6 +139,15 @@ module.exports = class FirebaseQuery {
     this.predicates = {
       ...this.predicates,
       [column]: this.filters.range(start, end),
+    };
+  }
+
+  appendOverlap(columnStart, columnEnd, value) {
+    const [start, end] = value;
+    this.predicates = {
+      ...this.predicates,
+      [columnStart]: this.filters.lessThanOrEqual(end),
+      [columnEnd]: this.filters.greaterThanOrEqual(start),
     };
   }
 

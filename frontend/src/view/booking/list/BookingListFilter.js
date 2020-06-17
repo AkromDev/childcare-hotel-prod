@@ -25,11 +25,10 @@ const schema = new FormFilterSchema([
   fields.id,
   fields.owner,
   fields.pet,
-  fields.arrivalRange,
-  fields.departureRange,
   fields.status,
   fields.feeRange,
   fields.createdAtRange,
+  fields.period,
 ]);
 
 class BookingListFilter extends Component {
@@ -106,16 +105,8 @@ class BookingListFilter extends Component {
                   </Col>
                   <Col md={24} lg={12}>
                     <DatePickerRangeFormItem
-                      name={fields.arrivalRange.name}
-                      label={fields.arrivalRange.label}
-                      layout={formItemLayout}
-                      showTime
-                    />
-                  </Col>
-                  <Col md={24} lg={12}>
-                    <DatePickerRangeFormItem
-                      name={fields.departureRange.name}
-                      label={fields.departureRange.label}
+                      name={fields.period.name}
+                      label={fields.period.label}
                       layout={formItemLayout}
                       showTime
                     />

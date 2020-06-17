@@ -79,6 +79,14 @@ class BookingRepository extends AbstractEntityRepository {
         );
       }
 
+      if (filter.period) {
+        query.appendOverlap(
+          'arrival',
+          'departure',
+          filter.period,
+        );
+      }
+
       if (filter.status) {
         query.appendEqual('status', filter.status);
       }

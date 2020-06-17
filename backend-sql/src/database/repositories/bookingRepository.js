@@ -94,6 +94,14 @@ class BookingRepository extends AbstractEntityRepository {
         );
       }
 
+      if (filter.period) {
+        sequelizeFilter.appendOverlap(
+          'arrival',
+          'departure',
+          filter.period,
+        );
+      }
+
       if (filter.status) {
         sequelizeFilter.appendEqual(
           'status',
