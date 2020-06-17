@@ -1,6 +1,6 @@
 {
   "projects": {
-    "development": "childcare-hotel-app-prod",
-    "production": "childcare-hotel-app-prod"
+    "development": "childcare-hotel-prod",
+    "production": "childcare-hotel-prod"
   }
 }
