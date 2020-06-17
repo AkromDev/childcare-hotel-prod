@@ -1,7 +1,7 @@
 const Roles = require('../../security/roles');
 
 module.exports = class UserRoleChecker {
-  static isPetOwner(currentUser) {
+  static isChildOwner(currentUser) {
     if (!currentUser || !currentUser.roles) {
       return false;
     }
@@ -31,7 +31,7 @@ module.exports = class UserRoleChecker {
 
     return (
       !this.isManager(currentUser) &&
-      !this.isPetOwner(currentUser)
+      !this.isChildOwner(currentUser)
     );
   }
 };

@@ -4,7 +4,7 @@ import auth from 'modules/auth/authReducers';
 import iam from 'modules/iam/iamReducers';
 import auditLog from 'modules/auditLog/auditLogReducers';
 import settings from 'modules/settings/settingsReducers';
-import pet from 'modules/pet/petReducers';
+import child from 'modules/child/childReducers';
 import booking from 'modules/booking/bookingReducers';
 import { combineReducers } from 'redux';
 
@@ -16,6 +16,6 @@ export default (history) =>
     iam,
     auditLog,
     settings,
-    pet,
+    child,
     booking,
   });

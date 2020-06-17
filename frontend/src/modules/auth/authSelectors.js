@@ -106,7 +106,7 @@ const selectCurrentUserAvatar = createSelector(
   },
 );
 
-const selectCurrentUserIsPetOwner = createSelector(
+const selectCurrentUserIsChildOwner = createSelector(
   [selectCurrentUser],
   (currentUser) => {
     return !new PermissionChecker(
@@ -138,10 +138,10 @@ const selectCurrentUserIsEmployee = createSelector(
   },
 );
 
-const selectRedirectToNewPet = createSelector(
+const selectRedirectToNewChild = createSelector(
   [selectRaw],
   (raw) => {
-    return !!raw.redirectToNewPet;
+    return !!raw.redirectToNewChild;
   },
 );
 
@@ -162,10 +162,10 @@ const selectors = {
   selectRaw,
   selectCurrentUserNameOrEmailPrefix,
   selectCurrentUserAvatar,
-  selectCurrentUserIsPetOwner,
+  selectCurrentUserIsChildOwner,
   selectCurrentUserIsManager,
   selectCurrentUserIsEmployee,
-  selectRedirectToNewPet,
+  selectRedirectToNewChild,
 };
 
 export default selectors;

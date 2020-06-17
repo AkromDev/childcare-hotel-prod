@@ -92,7 +92,7 @@ export default class BookingService {
               fullName
               email
             }
-            pet {
+            child {
               id
               name
             }
@@ -154,7 +154,7 @@ export default class BookingService {
                 fullName
                 email
               }
-              pet {
+              child {
                 id
                 name
               }

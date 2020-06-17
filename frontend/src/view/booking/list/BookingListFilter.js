@@ -16,7 +16,7 @@ import DatePickerRangeFormItem from 'view/shared/form/items/DatePickerRangeFormI
 import InputRangeFormItem from 'view/shared/form/items/InputRangeFormItem';
 import UserAutocompleteFormItem from 'view/iam/autocomplete/UserAutocompleteFormItem';
 import SelectFormItem from 'view/shared/form/items/SelectFormItem';
-import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import ChildAutocompleteFormItem from 'view/child/autocomplete/ChildAutocompleteFormItem';
 import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
@@ -24,7 +24,7 @@ const { fields } = model;
 const schema = new FormFilterSchema([
   fields.id,
   fields.owner,
-  fields.pet,
+  fields.child,
   fields.status,
   fields.feeRange,
   fields.createdAtRange,
@@ -57,7 +57,11 @@ class BookingListFilter extends Component {
   };
 
   render() {
-    const { loading, currentUser, isPetOwner } = this.props;
+    const {
+      loading,
+      currentUser,
+      isChildOwner,
+    } = this.props;
 
     return (
       <FilterWrapper>
@@ -84,7 +88,7 @@ class BookingListFilter extends Component {
                       showTime
                     />
                   </Col>
-                  {!isPetOwner && (
+                  {!isChildOwner && (
                     <Col md={24} lg={12}>
                       <UserAutocompleteFormItem
                         name={fields.owner.name}
@@ -94,12 +98,12 @@ class BookingListFilter extends Component {
                     </Col>
                   )}
                   <Col md={24} lg={12}>
-                    <PetAutocompleteFormItem
-                      name={fields.pet.name}
-                      label={fields.pet.label}
+                    <ChildAutocompleteFormItem
+                      name={fields.child.name}
+                      label={fields.child.label}
                       layout={formItemLayout}
                       owner={
-                        isPetOwner ? currentUser.id : null
+                        isChildOwner ? currentUser.id : null
                       }
                     />
                   </Col>
@@ -164,7 +168,7 @@ function select(state) {
   return {
     filter: selectors.selectFilter(state),
     currentUser: authSelectors.selectCurrentUser(state),
-    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+    isChildOwner: authSelectors.selectCurrentUserIsChildOwner(
       state,
     ),
   };

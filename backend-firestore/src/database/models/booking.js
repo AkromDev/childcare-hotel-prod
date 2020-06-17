@@ -6,7 +6,7 @@ module.exports = class Booking extends AbstractEntityModel {
   constructor() {
     super('booking', 'booking', {
       owner: new types.RelationToOne(),
-      pet: new types.RelationToOne(),
+      child: new types.RelationToOne(),
       arrival: new types.DateTime(),
       departure: new types.DateTime(),
       clientNotes: new types.String(null, 20000),

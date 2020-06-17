@@ -23,10 +23,10 @@ const selectPermissionToEdit = createSelector(
 const selectPermissionToEditRecord = createSelector(
   [
     selectPermissionToEdit,
-    authSelectors.selectCurrentUserIsPetOwner,
+    authSelectors.selectCurrentUserIsChildOwner,
     authSelectors.selectCurrentUserIsEmployee,
   ],
-  (hasPermissionToEdit, isPetOwner, isEmployee) => {
+  (hasPermissionToEdit, isChildOwner, isEmployee) => {
     return (record) => {
       if (!hasPermissionToEdit) {
         return false;
@@ -36,7 +36,7 @@ const selectPermissionToEditRecord = createSelector(
         return false;
       }
 
-      if (isPetOwner) {
+      if (isChildOwner) {
         return record.status === bookingStatus.BOOKED;
       }
 

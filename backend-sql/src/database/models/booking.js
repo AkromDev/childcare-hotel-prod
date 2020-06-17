@@ -67,8 +67,8 @@ module.exports = function (sequelize, DataTypes) {
       constraints: false,
     });
 
-    models.booking.belongsTo(models.pet, {
-      as: 'pet',
+    models.booking.belongsTo(models.child, {
+      as: 'child',
       constraints: false,
     });
 

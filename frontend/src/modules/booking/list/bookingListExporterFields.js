@@ -5,7 +5,7 @@ const { fields } = model;
 export default [
   fields.id,
   fields.owner,
-  fields.pet,
+  fields.child,
   fields.arrival,
   fields.departure,
   fields.clientNotes,
@@ -15,5 +15,5 @@ export default [
   fields.fee,
   fields.receipt,
   fields.createdAt,
-  fields.updatedAt
+  fields.updatedAt,
 ];

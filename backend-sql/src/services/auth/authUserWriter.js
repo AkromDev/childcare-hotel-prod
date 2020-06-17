@@ -42,7 +42,7 @@ class AuthUserWriter {
         authenticationUid: authUser.uid,
         roles: isFirstUser
           ? [Roles.values.manager]
-          : [Roles.values.petOwner],
+          : [Roles.values.childOwner],
       },
     );
 

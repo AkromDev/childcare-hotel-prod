@@ -1,12 +1,12 @@
 const en = {
   app: {
-    title: 'Pet Hotel',
+    title: 'Child Hotel',
   },
 
   entities: {
-    pet: {
+    child: {
       validation: {
-        bookingExists: `O pet não pode ser deletado pois existe uma reserva para ele.`,
+        bookingExists: `O child não pode ser deletado pois existe uma reserva para ele.`,
       },
     },
     booking: {
@@ -15,7 +15,7 @@ const en = {
           'Data de saída deve ser após a data de entrada',
         periodPast: 'O período deve estar no futuro',
         periodFull:
-          'Desculpe, o Pet Hotel está cheio neste período',
+          'Desculpe, o Child Hotel está cheio neste período',
       },
     },
   },
