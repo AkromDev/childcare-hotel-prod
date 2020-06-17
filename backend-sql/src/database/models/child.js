@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
       type: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['cat', 'dog'],
+        values: ['boy', 'girl'],
       },
       breed: {
         type: DataTypes.STRING(255),

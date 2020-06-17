@@ -64,8 +64,8 @@ const en = {
       },
       enumerators: {
         type: {
-          cat: 'Cat',
-          dog: 'Dog',
+          boy: 'Boy',
+          girl: 'Girl',
         },
         size: {
           small: 'Small',

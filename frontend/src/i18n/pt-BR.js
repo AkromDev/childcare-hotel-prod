@@ -64,8 +64,8 @@ const ptBR = {
       },
       enumerators: {
         type: {
-          cat: 'Gato',
-          dog: 'Cachorro',
+          boy: 'Gato',
+          girl: 'Cachorro',
         },
         size: {
           small: 'Pequeno',

@@ -30,8 +30,11 @@ const fields = {
     'type',
     label('type'),
     [
-      { id: 'cat', label: enumeratorLabel('type', 'cat') },
-      { id: 'dog', label: enumeratorLabel('type', 'dog') },
+      { id: 'boy', label: enumeratorLabel('type', 'boy') },
+      {
+        id: 'girl',
+        label: enumeratorLabel('type', 'girl'),
+      },
     ],
     {
       required: true,

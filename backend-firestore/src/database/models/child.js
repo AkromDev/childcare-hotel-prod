@@ -6,7 +6,7 @@ module.exports = class Child extends AbstractEntityModel {
     super('child', 'child', {
       owner: new types.RelationToOne(),
       name: new types.String(null, 255),
-      type: new types.Enumerator(['cat', 'dog']),
+      type: new types.Enumerator(['boy', 'girl']),
       breed: new types.String(null, 255),
       size: new types.Enumerator([
         'small',
