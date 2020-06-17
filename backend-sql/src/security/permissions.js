@@ -15,11 +15,15 @@ class Permissions {
       },
       iamImport: {
         id: 'iamImport',
-        allowedRoles: [roles.manager],
+        allowedRoles: [
+          roles.manager,
+          roles.iamSecurityReviewer,
+          roles.editor,
+        ],
       },
       iamRead: {
         id: 'iamRead',
-        allowedRoles: [roles.manager, roles.employee],
+        allowedRoles: [roles.manager],
       },
       iamUserAutocomplete: {
         id: 'iamUserAutocomplete',
@@ -83,7 +87,7 @@ class Permissions {
 
       bookingImport: {
         id: 'bookingImport',
-        allowedRoles: [roles.manager, roles.employee],
+        allowedRoles: [roles.manager],
       },
       bookingCreate: {
         id: 'bookingCreate',

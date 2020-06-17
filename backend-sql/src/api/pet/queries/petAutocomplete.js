@@ -4,16 +4,22 @@ const permissions = require('../../../security/permissions')
 const PetService = require('../../../services/petService');
 
 const schema = `
-  petAutocomplete(query: String, limit: Int): [AutocompleteOption!]!
+  petAutocomplete(query: String, owner: String, limit: Int): [AutocompleteOption!]!
 `;
 
 const resolver = {
   petAutocomplete: async (root, args, context, info) => {
-    new PermissionChecker(context)
-      .validateHas(permissions.petAutocomplete);
+    new PermissionChecker(context).validateHas(
+      permissions.petAutocomplete,
+    );
+
+    const filter = {
+      query: args.query,
+      owner: args.owner,
+    };
 
     return new PetService(context).findAllAutocomplete(
-      args.query,
+      filter,
       args.limit,
     );
   },
