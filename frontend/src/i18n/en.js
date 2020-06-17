@@ -22,65 +22,65 @@ const en = {
   },
 
   app: {
-    title: '',
+    title: 'Pet Hotel',
   },
 
   entities: {
     pet: {
       name: 'pet',
-      label: '',
-      menu: '',
+      label: 'Pets',
+      menu: 'Pets',
       exporterFileName: 'pet_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Pets',
+        title: 'Pets',
       },
       create: {
-        success: 'pet saved successfully',
+        success: 'Pet saved successfully',
       },
       update: {
-        success: 'pet saved successfully',
+        success: 'Pet saved successfully',
       },
       destroy: {
-        success: 'pet deleted successfully',
+        success: 'Pet deleted successfully',
       },
       destroyAll: {
-        success: 'pet(s) deleted successfully',
+        success: 'Pet(s) deleted successfully',
       },
       edit: {
-        title: 'Edit pet',
+        title: 'Edit Pet',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'name': '',
-        'type': '',
-        'breed': '',
-        'size': '',
-        'bookings': '',
+        id: 'Id',
+        owner: 'Owner',
+        name: 'Name',
+        type: 'Type',
+        breed: 'Breed',
+        size: 'Size',
+        bookings: 'Bookings',
         createdAt: 'Created at',
         updatedAt: 'Updated at',
         createdAtRange: 'Created at',
       },
       enumerators: {
-        'type': {
-          'cat': '',
-          'dog': '',
+        type: {
+          cat: 'Cat',
+          dog: 'Dog',
         },
-        'size': {
-          'small': '',
-          'medium': '',
-          'large': '',
+        size: {
+          small: 'Small',
+          medium: 'Medium',
+          large: 'Large',
         },
       },
       new: {
-        title: 'New pet',
+        title: 'New Pet',
       },
       view: {
-        title: 'View pet',
+        title: 'View Pet',
       },
       importer: {
-        title: 'Import pets',
+        title: 'Import Pets',
         fileName: 'pet_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
@@ -89,64 +89,64 @@ const en = {
 
     booking: {
       name: 'booking',
-      label: '',
-      menu: '',
+      label: 'Bookings',
+      menu: 'Bookings',
       exporterFileName: 'booking_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Bookings',
+        title: 'Bookings',
       },
       create: {
-        success: 'booking saved successfully',
+        success: 'Booking saved successfully',
       },
       update: {
-        success: 'booking saved successfully',
+        success: 'Booking saved successfully',
       },
       destroy: {
-        success: 'booking deleted successfully',
+        success: 'Booking deleted successfully',
       },
       destroyAll: {
-        success: 'booking(s) deleted successfully',
+        success: 'Booking(s) deleted successfully',
       },
       edit: {
-        title: 'Edit booking',
+        title: 'Edit Booking',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'pet': '',
-        'arrivalRange': '',
-        'arrival': '',
-        'departureRange': '',
-        'departure': '',
-        'clientNotes': '',
-        'employeeNotes': '',
-        'photos': '',
-        'status': '',
-        'cancellationNotes': '',
-        'feeRange': '',
-        'fee': '',
-        'receipt': '',
+        id: 'Id',
+        owner: 'Owner',
+        pet: 'Pet',
+        arrivalRange: 'Arrival',
+        arrival: 'Arrival',
+        departureRange: 'Departure',
+        departure: 'Departure',
+        clientNotes: 'Notes',
+        employeeNotes: 'Employee Notes',
+        photos: 'Photos',
+        status: 'Status',
+        cancellationNotes: 'Cancellation Notes',
+        feeRange: 'Total Fee',
+        fee: 'Total Fee',
+        receipt: 'Receipt',
         createdAt: 'Created at',
         updatedAt: 'Updated at',
         createdAtRange: 'Created at',
       },
       enumerators: {
-        'status': {
-          'booked': '',
-          'progress': '',
-          'cancelled': '',
-          'completed': '',
+        status: {
+          booked: 'Booked',
+          progress: 'In Progress',
+          cancelled: 'Cancelled',
+          completed: 'Completed',
         },
       },
       new: {
-        title: 'New booking',
+        title: 'New Booking',
       },
       view: {
-        title: 'View booking',
+        title: 'View Booking',
       },
       importer: {
-        title: 'Import bookings',
+        title: 'Import Bookings',
         fileName: 'booking_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
@@ -235,8 +235,8 @@ const en = {
   },
 
   iam: {
-    title: 'Identity and Access Management',
-    menu: 'IAM',
+    title: 'Users',
+    menu: 'Users',
     disable: 'Disable',
     disabled: 'Disabled',
     enabled: 'Enabled',
@@ -283,7 +283,7 @@ const en = {
         'User with this email already exists',
       userNotFound: 'User not found',
       disablingHimself: `You can't disable yourself`,
-      revokingOwnPermission: `You can't revoke your own owner permission`,
+      revokingOwnPermission: `You can't revoke your own manager permission`,
     },
   },
 
