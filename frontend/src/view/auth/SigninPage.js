@@ -201,7 +201,7 @@ class SigninPage extends Component {
                   </Link>
                 </OtherActions>
 
-                <I18nFlags style={{ marginTop: '24px' }} />
+                {/* <I18nFlags style={{ marginTop: '24px' }} /> */}
               </Form>
             )}
           />

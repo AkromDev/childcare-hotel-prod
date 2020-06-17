@@ -59,7 +59,7 @@ class Header extends Component {
           />
           <div>
             <span className="i18n-select">
-              <I18nSelect />
+              {/* <I18nSelect /> */}
             </span>
 
             <Dropdown
