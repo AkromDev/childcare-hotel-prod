@@ -1,7 +1,7 @@
 const PermissionChecker = require('../../../services/iam/permissionChecker');
 const permissions = require('../../../security/permissions')
   .values;
-const BookingService = require('../../../services/bookingService');
+const BookingService = require('../../../services/booking/bookingService');
 
 const schema = `
   bookingPeriodAvailable(arrival: DateTime!, departure: DateTime!, idToExclude: String): Boolean!

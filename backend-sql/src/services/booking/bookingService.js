@@ -1,12 +1,13 @@
-const BookingRepository = require('../database/repositories/bookingRepository');
-const PetRepository = require('../database/repositories/petRepository');
-const ValidationError = require('../errors/validationError');
-const AbstractRepository = require('../database/repositories/abstractRepository');
-const UserRoleChecker = require('./iam/userRoleChecker');
-const ForbiddenError = require('../errors/forbiddenError');
-const bookingStatus = require('../enumerators/bookingStatus');
+const BookingRepository = require('../../database/repositories/bookingRepository');
+const PetRepository = require('../../database/repositories/petRepository');
+const ValidationError = require('../../errors/validationError');
+const AbstractRepository = require('../../database/repositories/abstractRepository');
+const UserRoleChecker = require('../iam/userRoleChecker');
+const ForbiddenError = require('../../errors/forbiddenError');
+const bookingStatus = require('../../enumerators/bookingStatus');
 const moment = require('moment');
-const SettingsService = require('./settingsService');
+const SettingsService = require('../settingsService');
+const BookingFeeCalculator = require('./bookingFeeCalculator');
 
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
@@ -18,6 +19,7 @@ module.exports = class BookingService {
 
   async create(data) {
     await this._validateCreate(data);
+    data.fee = await this.calculateFee(data);
 
     const transaction = await AbstractRepository.createTransaction();
 
@@ -67,6 +69,7 @@ module.exports = class BookingService {
 
   async update(id, data) {
     await this._validateUpdate(id, data);
+    data.fee = await this.calculateFee(data);
 
     const transaction = await AbstractRepository.createTransaction();
 
@@ -316,12 +319,24 @@ module.exports = class BookingService {
       idToExclude,
     );
 
-    const capacity = (
-      await SettingsService.findOrCreateDefault(
-        this.currentUser,
-      )
-    ).capacity;
+    const capacity = (await SettingsService.findOrCreateDefault(
+      this.currentUser,
+    )).capacity;
 
     return bookingsAtPeriod < capacity;
+  }
+
+  async calculateFee(data) {
+    const { arrival, departure } = data;
+
+    const dailyFee = (await SettingsService.findOrCreateDefault(
+      this.currentUser,
+    )).dailyFee;
+
+    return BookingFeeCalculator.calculate(
+      arrival,
+      departure,
+      dailyFee,
+    );
   }
 };
