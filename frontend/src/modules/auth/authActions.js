@@ -4,7 +4,7 @@ import Errors from 'modules/shared/error/errors';
 import Message from 'view/shared/message';
 import { i18n } from 'i18n';
 import { getHistory } from 'modules/store';
-import PetService from 'modules/pet/petService';
+import ChildService from 'modules/child/childService';
 
 const prefix = 'AUTH';
 
@@ -81,7 +81,7 @@ const actions = {
 
       let authenticationUser = null;
       let currentUser = null;
-      let redirectToNewPet = false;
+      let redirectToNewChild = false;
 
       const credentials = await service.signinWithSocial(
         provider,
@@ -93,7 +93,7 @@ const actions = {
         currentUser = await service.fetchMe();
         currentUser.emailVerified =
           authenticationUser.emailVerified;
-        redirectToNewPet = !(await PetService.exists());
+        redirectToNewChild = !(await ChildService.exists());
       }
 
       // in background
@@ -104,7 +104,7 @@ const actions = {
         payload: {
           currentUser,
           authenticationUser,
-          redirectToNewPet,
+          redirectToNewChild,
         },
       });
     } catch (error) {
@@ -130,7 +130,7 @@ const actions = {
       const currentUser = await service.fetchMe();
       currentUser.emailVerified =
         authenticationUser.emailVerified;
-      const redirectToNewPet = !(await PetService.exists());
+      const redirectToNewChild = !(await ChildService.exists());
 
       // in background
       service.reauthenticateWithStorageToken();
@@ -140,7 +140,7 @@ const actions = {
         payload: {
           currentUser,
           authenticationUser,
-          redirectToNewPet,
+          redirectToNewChild,
         },
       });
     } catch (error) {
@@ -167,7 +167,7 @@ const actions = {
 
       let authenticationUser = null;
       let currentUser = null;
-      let redirectToNewPet = null;
+      let redirectToNewChild = null;
 
       const credentials = await service.signinWithEmailAndPassword(
         email,
@@ -180,7 +180,7 @@ const actions = {
         currentUser = await service.fetchMe();
         currentUser.emailVerified =
           authenticationUser.emailVerified;
-        redirectToNewPet = !(await PetService.exists());
+        redirectToNewChild = !(await ChildService.exists());
       }
 
       // in background
@@ -191,7 +191,7 @@ const actions = {
         payload: {
           currentUser,
           authenticationUser,
-          redirectToNewPet,
+          redirectToNewChild,
         },
       });
     } catch (error) {
@@ -234,7 +234,7 @@ const actions = {
   ) => {
     try {
       let currentUser = null;
-      let redirectToNewPet = false;
+      let redirectToNewChild = false;
 
       if (authenticationUser) {
         currentUser = await service.fetchMe();
@@ -244,7 +244,7 @@ const actions = {
 
         currentUser.emailVerified =
           authenticationUser.emailVerified;
-        redirectToNewPet = !(await PetService.exists());
+        redirectToNewChild = !(await ChildService.exists());
       }
 
       dispatch({
@@ -252,7 +252,7 @@ const actions = {
         payload: {
           currentUser,
           authenticationUser: authenticationUser,
-          redirectToNewPet,
+          redirectToNewChild,
         },
       });
     } catch (error) {

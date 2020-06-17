@@ -4,7 +4,7 @@ const { fields } = model;
 
 export default [
   fields.owner,
-  fields.pet,
+  fields.child,
   fields.arrival,
   fields.departure,
   fields.clientNotes,

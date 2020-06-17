@@ -13,7 +13,7 @@ module.exports = class BookingUpdateEmail {
       this.language,
       'emails.bookingUpdate.subject',
       i18n(this.language, 'app.title'),
-      this.petName,
+      this.childName,
     );
   }
 
@@ -24,7 +24,7 @@ module.exports = class BookingUpdateEmail {
       this.language,
       'emails.bookingUpdate.body',
       appTitle,
-      this.petName,
+      this.childName,
       this.employeeNotes,
       this.imageRows,
       this.link,
@@ -82,7 +82,7 @@ module.exports = class BookingUpdateEmail {
     );
   }
 
-  get petName() {
-    return this.booking.pet.name;
+  get childName() {
+    return this.booking.child.name;
   }
 };

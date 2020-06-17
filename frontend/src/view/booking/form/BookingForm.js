@@ -19,11 +19,11 @@ import SelectFormItem from 'view/shared/form/items/SelectFormItem';
 import DatePickerFormItem from 'view/shared/form/items/DatePickerFormItem';
 import ImagesFormItem from 'view/shared/form/items/ImagesFormItem';
 import FilesFormItem from 'view/shared/form/items/FilesFormItem';
-import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import ChildAutocompleteFormItem from 'view/child/autocomplete/ChildAutocompleteFormItem';
 import authSelectors from 'modules/auth/authSelectors';
 import bookingStatus from 'modules/booking/bookingStatus';
 import UserViewItem from 'view/iam/view/UserViewItem';
-import PetViewItem from 'view/pet/view/PetViewItem';
+import ChildViewItem from 'view/child/view/ChildViewItem';
 import DatePickerRangeFormItem from 'view/shared/form/items/DatePickerRangeFormItem';
 import settingsActions from 'modules/settings/settingsActions';
 import settingsSelectors from 'modules/settings/settingsSelectors';
@@ -34,7 +34,7 @@ const { fields } = model;
 class BookingForm extends Component {
   schema = new FormSchema(fields.id, [
     fields.owner,
-    fields.pet,
+    fields.child,
     fields.arrival,
     fields.departure,
     fields.clientNotes,
@@ -60,13 +60,13 @@ class BookingForm extends Component {
   }
 
   isOwnerEnabled = () => {
-    const { isPetOwner, isManager, record } = this.props;
+    const { isChildOwner, isManager, record } = this.props;
 
     if (isManager) {
       return true;
     }
 
-    if (isPetOwner) {
+    if (isChildOwner) {
       return false;
     }
 
@@ -85,7 +85,7 @@ class BookingForm extends Component {
     return !this.isOwnerEnabled() && this.props.record;
   };
 
-  isPetEnabled = (form) => {
+  isChildEnabled = (form) => {
     if (!form.values.owner) {
       return false;
     }
@@ -107,8 +107,8 @@ class BookingForm extends Component {
     return record.status === bookingStatus.BOOKED;
   };
 
-  isPetVisible = (form) => {
-    return !this.isPetEnabled(form) && form.values.pet;
+  isChildVisible = (form) => {
+    return !this.isChildEnabled(form) && form.values.child;
   };
 
   isEditing = () => {
@@ -117,13 +117,13 @@ class BookingForm extends Component {
   };
 
   isStatusEnabled = () => {
-    const { isPetOwner } = this.props;
+    const { isChildOwner } = this.props;
 
     if (this.isEditing()) {
       return true;
     }
 
-    return !isPetOwner;
+    return !isChildOwner;
   };
 
   isEmployeeNotesAndPhotosEnabled = (form) => {
@@ -156,13 +156,13 @@ class BookingForm extends Component {
 
   statusOptions = () => {
     const {
-      isPetOwner,
+      isChildOwner,
       isManager,
       isEmployee,
     } = this.props;
 
-    if (isPetOwner) {
-      return this.statusOptionsPetOwner();
+    if (isChildOwner) {
+      return this.statusOptionsChildOwner();
     }
 
     if (isEmployee) {
@@ -195,7 +195,7 @@ class BookingForm extends Component {
     );
   };
 
-  statusOptionsPetOwner = () => {
+  statusOptionsChildOwner = () => {
     return fields.status.options.filter((option) => {
       return [
         bookingStatus.BOOKED,
@@ -228,7 +228,7 @@ class BookingForm extends Component {
       status: bookingStatus.BOOKED,
     };
 
-    if (this.props.isPetOwner) {
+    if (this.props.isChildOwner) {
       initialValues.owner = this.props.currentUser;
     }
 
@@ -291,11 +291,11 @@ class BookingForm extends Component {
                   />
                 )}
 
-                {this.isPetEnabled(form) && (
-                  <PetAutocompleteFormItem
-                    name={fields.pet.name}
-                    label={fields.pet.label}
-                    required={fields.pet.required}
+                {this.isChildEnabled(form) && (
+                  <ChildAutocompleteFormItem
+                    name={fields.child.name}
+                    label={fields.child.label}
+                    required={fields.child.required}
                     owner={
                       form.values.owner
                         ? form.values.owner.id
@@ -304,10 +304,12 @@ class BookingForm extends Component {
                   />
                 )}
 
-                {this.isPetVisible(form) && (
-                  <PetViewItem
-                    label={fields.pet.label}
-                    value={fields.pet.forView(record.pet)}
+                {this.isChildVisible(form) && (
+                  <ChildViewItem
+                    label={fields.child.label}
+                    value={fields.child.forView(
+                      record.child,
+                    )}
                   />
                 )}
 
@@ -451,7 +453,7 @@ function select(state) {
     saveLoading: selectors.selectSaveLoading(state),
     record: selectors.selectRecord(state),
     currentUser: authSelectors.selectCurrentUser(state),
-    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+    isChildOwner: authSelectors.selectCurrentUserIsChildOwner(
       state,
     ),
     isEmployee: authSelectors.selectCurrentUserIsEmployee(

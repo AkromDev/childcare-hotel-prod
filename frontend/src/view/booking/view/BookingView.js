@@ -6,7 +6,7 @@ import TextViewItem from 'view/shared/view/TextViewItem';
 import UserViewItem from 'view/iam/view/UserViewItem';
 import ImagesViewItem from 'view/shared/view/ImagesViewItem';
 import FilesViewItem from 'view/shared/view/FilesViewItem';
-import PetViewItem from 'view/pet/view/PetViewItem';
+import ChildViewItem from 'view/child/view/ChildViewItem';
 import CustomViewItem from 'view/shared/view/CustomViewItem';
 import { bookingStatusColor } from 'modules/booking/bookingStatus';
 import { Tag } from 'antd';
@@ -29,9 +29,9 @@ class BookingView extends Component {
           value={fields.owner.forView(record.owner)}
         />
 
-        <PetViewItem
-          label={fields.pet.label}
-          value={fields.pet.forView(record.pet)}
+        <ChildViewItem
+          label={fields.child.label}
+          value={fields.child.forView(record.child)}
         />
 
         <TextViewItem

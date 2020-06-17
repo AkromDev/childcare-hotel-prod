@@ -1,11 +1,11 @@
 const userFixture = require('./userFixture');
-const petFixture = require('./petFixture');
+const childFixture = require('./childFixture');
 const bookingFixture = require('./bookingFixture');
 const AbstractRepository = require('../database/repositories/abstractRepository');
 
 module.exports = {
   user: userFixture,
-  pet: petFixture,
+  child: childFixture,
   booking: bookingFixture,
 
   async cleanDatabase() {

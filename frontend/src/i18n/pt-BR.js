@@ -22,33 +22,33 @@ const ptBR = {
   },
 
   app: {
-    title: 'Pet Hotel',
+    title: 'Child Hotel',
   },
 
   entities: {
-    pet: {
-      name: 'pet',
-      label: 'Pets',
-      menu: 'Pets',
-      exporterFileName: 'pet_export',
+    child: {
+      name: 'child',
+      label: 'Childs',
+      menu: 'Childs',
+      exporterFileName: 'child_export',
       list: {
-        menu: 'Pets',
-        title: 'Pets',
+        menu: 'Childs',
+        title: 'Childs',
       },
       create: {
-        success: 'Pet salvo com sucesso',
+        success: 'Child salvo com sucesso',
       },
       update: {
-        success: 'Pet salvo com sucesso',
+        success: 'Child salvo com sucesso',
       },
       destroy: {
-        success: 'Pet deletado com sucesso',
+        success: 'Child deletado com sucesso',
       },
       destroyAll: {
-        success: 'Pet(s) deletado com sucesso',
+        success: 'Child(s) deletado com sucesso',
       },
       edit: {
-        title: 'Editar Pet',
+        title: 'Editar Child',
       },
       fields: {
         id: 'Id',
@@ -74,14 +74,14 @@ const ptBR = {
         },
       },
       new: {
-        title: 'Novo Pet',
+        title: 'Novo Child',
       },
       view: {
-        title: 'Visualizar Pet',
+        title: 'Visualizar Child',
       },
       importer: {
-        title: 'Importar Pets',
-        fileName: 'pet_import_template',
+        title: 'Importar Childs',
+        fileName: 'child_import_template',
         hint:
           'Arquivos/Imagens devem ser as URLs dos arquivos, separados por espaço. Relacionamentos devem ser os IDs separados por espaço.',
       },
@@ -114,7 +114,7 @@ const ptBR = {
       fields: {
         id: 'Id',
         owner: 'Dono',
-        pet: 'Pet',
+        child: 'Child',
         arrivalRange: 'Chegada',
         arrival: 'Chegada',
         departureRange: 'Saída',
@@ -155,7 +155,7 @@ const ptBR = {
       validation: {
         periodPast: 'O período deve estar no futuro',
         periodFull:
-          'Desculpe, o Pet Hotel está cheio neste período',
+          'Desculpe, o Child Hotel está cheio neste período',
       },
     },
   },
@@ -200,9 +200,9 @@ const ptBR = {
       label: 'Funcionário',
       description: 'Acesso de Funcionário',
     },
-    petOwner: {
-      label: 'Dono do Pet',
-      description: 'Acesso de dono to Pet',
+    childOwner: {
+      label: 'Dono do Child',
+      description: 'Acesso de dono to Child',
     },
   },
 

@@ -22,33 +22,33 @@ const en = {
   },
 
   app: {
-    title: 'Pet Hotel',
+    title: 'Child Hotel',
   },
 
   entities: {
-    pet: {
-      name: 'pet',
-      label: 'Pets',
-      menu: 'Pets',
-      exporterFileName: 'pet_export',
+    child: {
+      name: 'child',
+      label: 'Childs',
+      menu: 'Childs',
+      exporterFileName: 'child_export',
       list: {
-        menu: 'Pets',
-        title: 'Pets',
+        menu: 'Childs',
+        title: 'Childs',
       },
       create: {
-        success: 'Pet saved successfully',
+        success: 'Child saved successfully',
       },
       update: {
-        success: 'Pet saved successfully',
+        success: 'Child saved successfully',
       },
       destroy: {
-        success: 'Pet deleted successfully',
+        success: 'Child deleted successfully',
       },
       destroyAll: {
-        success: 'Pet(s) deleted successfully',
+        success: 'Child(s) deleted successfully',
       },
       edit: {
-        title: 'Edit Pet',
+        title: 'Edit Child',
       },
       fields: {
         id: 'Id',
@@ -74,14 +74,14 @@ const en = {
         },
       },
       new: {
-        title: 'New Pet',
+        title: 'New Child',
       },
       view: {
-        title: 'View Pet',
+        title: 'View Child',
       },
       importer: {
-        title: 'Import Pets',
-        fileName: 'pet_import_template',
+        title: 'Import Childs',
+        fileName: 'child_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
       },
@@ -114,7 +114,7 @@ const en = {
       fields: {
         id: 'Id',
         owner: 'Owner',
-        pet: 'Pet',
+        child: 'Child',
         arrivalRange: 'Arrival',
         arrival: 'Arrival',
         departureRange: 'Departure',
@@ -155,7 +155,7 @@ const en = {
       validation: {
         periodPast: 'The period must be in the future',
         periodFull:
-          'Sorry, the Pet Hotel is full at this time',
+          'Sorry, the Child Hotel is full at this time',
       },
     },
   },
@@ -202,9 +202,9 @@ const en = {
       label: 'Employee',
       description: 'Employee access',
     },
-    petOwner: {
-      label: 'Pet Owner',
-      description: 'Pet owner access',
+    childOwner: {
+      label: 'Child Owner',
+      description: 'Child owner access',
     },
   },
 

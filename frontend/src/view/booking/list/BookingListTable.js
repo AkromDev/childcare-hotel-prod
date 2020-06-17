@@ -13,7 +13,7 @@ import TableWrapper from 'view/shared/styles/TableWrapper';
 import ButtonLink from 'view/shared/styles/ButtonLink';
 import UserListItem from 'view/iam/list/users/UserListItem';
 import FilesListView from 'view/shared/list/FileListView';
-import PetListItem from 'view/pet/list/PetListItem';
+import ChildListItem from 'view/child/list/ChildListItem';
 import authSelectors from 'modules/auth/authSelectors';
 import { bookingStatusColor } from 'modules/booking/bookingStatus';
 
@@ -35,12 +35,12 @@ class BookingListTable extends Component {
 
   columns = [
     fields.id.forTable(),
-    !this.props.isPetOwner &&
+    !this.props.isChildOwner &&
       fields.owner.forTable({
         render: (value) => <UserListItem value={value} />,
       }),
-    fields.pet.forTable({
-      render: (value) => <PetListItem value={value} />,
+    fields.child.forTable({
+      render: (value) => <ChildListItem value={value} />,
     }),
     fields.arrival.forTable(),
     fields.departure.forTable(),
@@ -132,7 +132,7 @@ function select(state) {
     hasPermissionToDestroy: bookingSelectors.selectPermissionToDestroy(
       state,
     ),
-    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+    isChildOwner: authSelectors.selectCurrentUserIsChildOwner(
       state,
     ),
   };

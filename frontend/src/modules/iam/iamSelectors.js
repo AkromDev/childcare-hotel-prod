@@ -73,7 +73,7 @@ const selectPermissionToEditRecord = createSelector(
 
       if (
         record.role &&
-        record.role === Roles.values.petOwner
+        record.role === Roles.values.childOwner
       ) {
         return true;
       }
@@ -82,7 +82,7 @@ const selectPermissionToEditRecord = createSelector(
         return false;
       }
 
-      return record.roles[0] === Roles.values.petOwner;
+      return record.roles[0] === Roles.values.childOwner;
     };
   },
 );
