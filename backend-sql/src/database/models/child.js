@@ -19,19 +19,19 @@ module.exports = function (sequelize, DataTypes) {
       type: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['cat', 'dog'],
+        values: ['boy', 'girl'],
       },
-      breed: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
+      // breed: {
+      //   type: DataTypes.STRING(255),
+      //   allowNull: false,
+      //   validate: {
+      //     notEmpty: true,
+      //   },
+      // },
       size: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['small', 'medium', 'large'],
+        values: ['toddler', 'preschooler', 'schoolAged'],
       },
       importHash: {
         type: DataTypes.STRING(255),

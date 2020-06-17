@@ -4,13 +4,13 @@ const schema = `
     owner: User
     name: String
     type: ChildTypeEnum
-    breed: String
     size: ChildSizeEnum
     bookings: [ Booking! ]
     createdAt: DateTime
     updatedAt: DateTime
   }
-`;
+  `;
+// breed: String
 
 const resolver = {};
 

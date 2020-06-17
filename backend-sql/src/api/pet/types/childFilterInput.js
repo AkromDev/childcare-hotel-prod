@@ -4,11 +4,11 @@ const schema = `
     owner: String
     name: String
     type: ChildTypeEnum
-    breed: String
     size: ChildSizeEnum
     createdAtRange: [ DateTime ]
   }
-`;
+  `;
+// breed: String
 
 const resolver = {};
 

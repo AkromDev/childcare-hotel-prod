@@ -30,32 +30,35 @@ const fields = {
     'type',
     label('type'),
     [
-      { id: 'cat', label: enumeratorLabel('type', 'cat') },
-      { id: 'dog', label: enumeratorLabel('type', 'dog') },
+      { id: 'boy', label: enumeratorLabel('type', 'boy') },
+      {
+        id: 'girl',
+        label: enumeratorLabel('type', 'girl'),
+      },
     ],
     {
       required: true,
     },
   ),
-  breed: new StringField('breed', label('breed'), {
-    required: true,
-    max: 255,
-  }),
+  // breed: new StringField('breed', label('breed'), {
+  //   required: true,
+  //   max: 255,
+  // }),
   size: new EnumeratorField(
     'size',
     label('size'),
     [
       {
-        id: 'small',
-        label: enumeratorLabel('size', 'small'),
+        id: 'toddler',
+        label: enumeratorLabel('size', 'toddler'),
       },
       {
-        id: 'medium',
-        label: enumeratorLabel('size', 'medium'),
+        id: 'preschooler',
+        label: enumeratorLabel('size', 'preschooler'),
       },
       {
-        id: 'large',
-        label: enumeratorLabel('size', 'large'),
+        id: 'schoolAged',
+        label: enumeratorLabel('size', 'schoolAged'),
       },
     ],
     {

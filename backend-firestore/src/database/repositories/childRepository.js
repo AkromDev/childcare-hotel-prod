@@ -71,9 +71,9 @@ class ChildRepository extends AbstractEntityRepository {
         query.appendEqual('type', filter.type);
       }
 
-      if (filter.breed) {
-        query.appendIlike('breed', filter.breed);
-      }
+      // if (filter.breed) {
+      //   query.appendIlike('breed', filter.breed);
+      // }
 
       if (filter.size) {
         query.appendEqual('size', filter.size);

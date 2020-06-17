@@ -54,9 +54,9 @@ const en = {
         id: 'Id',
         owner: 'Owner',
         name: 'Name',
-        type: 'Type',
-        breed: 'Breed',
-        size: 'Size',
+        type: 'Gender',
+        // breed: 'Breed',
+        size: 'Age Group',
         bookings: 'Bookings',
         createdAt: 'Created at',
         updatedAt: 'Updated at',
@@ -64,13 +64,13 @@ const en = {
       },
       enumerators: {
         type: {
-          cat: 'Cat',
-          dog: 'Dog',
+          boy: 'Boy',
+          girl: 'Girl',
         },
         size: {
-          small: 'Small',
-          medium: 'Medium',
-          large: 'Large',
+          toddler: 'Toddler (1-2)',
+          preschooler: 'Preschooler (3-5)',
+          schoolAged: 'School Aged (6-12)',
         },
       },
       new: {

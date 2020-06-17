@@ -7,7 +7,7 @@ export default [
   fields.owner,
   fields.name,
   fields.type,
-  fields.breed,
+  // fields.breed,
   fields.size,
   fields.createdAt,
   fields.updatedAt,

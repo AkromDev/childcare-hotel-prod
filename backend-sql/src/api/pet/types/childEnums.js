@@ -1,13 +1,13 @@
 const schema = `
   enum ChildTypeEnum {
-    cat
-    dog
+    boy
+    girl
   }
 
   enum ChildSizeEnum {
-    small
-    medium
-    large
+    toddler
+    preschooler
+    schoolAged
   }
 `;
 

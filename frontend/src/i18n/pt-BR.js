@@ -55,7 +55,7 @@ const ptBR = {
         owner: 'Dono',
         name: 'Nome',
         type: 'Tipo',
-        breed: 'Raça',
+        // breed: 'Raça',
         size: 'Tamanho',
         bookings: 'Reservas',
         createdAt: 'Criado em',
@@ -64,13 +64,13 @@ const ptBR = {
       },
       enumerators: {
         type: {
-          cat: 'Gato',
-          dog: 'Cachorro',
+          boy: 'Gato',
+          girl: 'Cachorro',
         },
         size: {
-          small: 'Pequeno',
-          medium: 'Médio',
-          large: 'Grande',
+          toddler: 'Pequeno',
+          preschooler: 'Médio',
+          schoolAged: 'Grande',
         },
       },
       new: {
