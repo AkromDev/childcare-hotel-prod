@@ -129,6 +129,15 @@ module.exports = class BookingService {
   }
 
   async _validateUpdateForEmployee(id, data, existingData) {
+    if (
+      [
+        bookingStatus.CANCELLED,
+        bookingStatus.COMPLETED,
+      ].includes(existingData.status)
+    ) {
+      throw new ForbiddenError(this.language);
+    }
+
     if (existingData.status !== bookingStatus.BOOKED) {
       if (data.owner !== existingData.owner.id) {
         throw new ForbiddenError(this.language);
