@@ -25,6 +25,9 @@ import bookingStatus from 'modules/booking/bookingStatus';
 import UserViewItem from 'view/iam/view/UserViewItem';
 import PetViewItem from 'view/pet/view/PetViewItem';
 import DatePickerRangeFormItem from 'view/shared/form/items/DatePickerRangeFormItem';
+import settingsActions from 'modules/settings/settingsActions';
+import settingsSelectors from 'modules/settings/settingsSelectors';
+import BookingFeeCalculator from 'modules/booking/bookingFeeCalculator';
 
 const { fields } = model;
 
@@ -46,6 +49,8 @@ class BookingForm extends Component {
 
   componentDidMount() {
     const { dispatch, match } = this.props;
+
+    dispatch(settingsActions.doFind());
 
     if (this.isEditing()) {
       dispatch(actions.doFind(match.params.id));
@@ -145,6 +150,10 @@ class BookingForm extends Component {
     return form.values.status === bookingStatus.COMPLETED;
   };
 
+  isFeeVisible = (form) => {
+    return form.values.fee;
+  };
+
   statusOptions = () => {
     const {
       isPetOwner,
@@ -231,7 +240,20 @@ class BookingForm extends Component {
     form.setFieldValue('period', value);
     form.setFieldValue('arrival', value[0]);
     form.setFieldValue('departure', value[1]);
+    this.calculateAndSetFee(value[0], value[1], form);
   }
+
+  calculateAndSetFee = (arrival, departure, form) => {
+    const { dailyFee } = this.props;
+
+    const fee = BookingFeeCalculator.calculate(
+      arrival,
+      departure,
+      dailyFee,
+    );
+
+    form.setFieldValue('fee', fee);
+  };
 
   renderForm() {
     const { saveLoading, record } = this.props;
@@ -351,11 +373,14 @@ class BookingForm extends Component {
                     }
                   />
                 )}
-                <InputFormItem
-                  name={fields.fee.name}
-                  label={fields.fee.label}
-                  required={fields.fee.required}
-                />
+                {this.isFeeVisible(form) && (
+                  <ViewFormItem
+                    name={fields.fee.name}
+                    label={fields.fee.label}
+                    required={fields.fee.required}
+                    formatter={fields.fee.forView}
+                  />
+                )}
                 {this.isReceiptEnabled(form) && (
                   <FilesFormItem
                     name={fields.receipt.name}
@@ -420,7 +445,9 @@ class BookingForm extends Component {
 
 function select(state) {
   return {
-    findLoading: selectors.selectFindLoading(state),
+    findLoading:
+      selectors.selectFindLoading(state) ||
+      settingsSelectors.selectFindLoading(state),
     saveLoading: selectors.selectSaveLoading(state),
     record: selectors.selectRecord(state),
     currentUser: authSelectors.selectCurrentUser(state),
@@ -433,6 +460,7 @@ function select(state) {
     isManager: authSelectors.selectCurrentUserIsManager(
       state,
     ),
+    dailyFee: settingsSelectors.selectDailyFee(state),
   };
 }
 

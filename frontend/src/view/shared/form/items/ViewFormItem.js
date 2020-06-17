@@ -6,11 +6,21 @@ import { FastField } from 'formik';
 
 class ViewFormItemNotFast extends Component {
   render() {
-    const { label, name, form, layout } = this.props;
+    const {
+      label,
+      name,
+      form,
+      layout,
+      formatter,
+    } = this.props;
 
     return (
       <Form.Item {...layout} label={label}>
-        <strong>{form.values[name]}</strong>
+        <strong>
+          {formatter
+            ? formatter(form.values[name])
+            : form.values[name]}
+        </strong>
       </Form.Item>
     );
   }
@@ -25,6 +35,7 @@ ViewFormItemNotFast.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   layout: PropTypes.object,
+  formatter: PropTypes.func,
 };
 
 class ViewFormItem extends Component {
