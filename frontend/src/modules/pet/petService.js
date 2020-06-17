@@ -95,6 +95,9 @@ export default class PetService {
             size
             bookings {
               id
+              arrival
+              departure
+              status
             }
             createdAt
             updatedAt
