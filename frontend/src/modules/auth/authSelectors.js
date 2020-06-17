@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect';
+import PermissionChecker from 'modules/auth/permissionChecker';
+import Roles from 'security/roles';
 
 const selectRaw = (state) => state.auth;
 
@@ -104,6 +106,45 @@ const selectCurrentUserAvatar = createSelector(
   },
 );
 
+const selectCurrentUserIsPetOwner = createSelector(
+  [selectCurrentUser],
+  (currentUser) => {
+    return !new PermissionChecker(
+      currentUser,
+    ).rolesMatchOneOf([
+      Roles.values.manager,
+      Roles.values.employee,
+    ]);
+  },
+);
+
+const selectCurrentUserIsManager = createSelector(
+  [selectCurrentUser],
+  (currentUser) => {
+    return new PermissionChecker(
+      currentUser,
+    ).rolesMatchOneOf(Roles.values.manager);
+  },
+);
+
+const selectCurrentUserIsEmployee = createSelector(
+  [selectCurrentUser, selectCurrentUserIsManager],
+  (currentUser, isManager) => {
+    const isEmployee = new PermissionChecker(
+      currentUser,
+    ).rolesMatchOneOf(Roles.values.employee);
+
+    return isEmployee && !isManager;
+  },
+);
+
+const selectRedirectToNewPet = createSelector(
+  [selectRaw],
+  (raw) => {
+    return !!raw.redirectToNewPet;
+  },
+);
+
 const selectors = {
   selectLoadingPasswordReset,
   selectLoadingEmailConfirmation,
@@ -121,6 +162,10 @@ const selectors = {
   selectRaw,
   selectCurrentUserNameOrEmailPrefix,
   selectCurrentUserAvatar,
+  selectCurrentUserIsPetOwner,
+  selectCurrentUserIsManager,
+  selectCurrentUserIsEmployee,
+  selectRedirectToNewPet,
 };
 
 export default selectors;

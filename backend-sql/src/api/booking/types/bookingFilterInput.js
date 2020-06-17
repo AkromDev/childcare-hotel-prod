@@ -8,6 +8,7 @@ const schema = `
     status: BookingStatusEnum
     feeRange: [ Float ]
     createdAtRange: [ DateTime ]
+    period: [ DateTime ]
   }
 `;
 

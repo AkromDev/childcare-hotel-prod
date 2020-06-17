@@ -4,6 +4,8 @@ const ValidationError = require('../../errors/validationError');
 const UserRepository = require('../../database/repositories/userRepository');
 const UserRoleRepository = require('../../database/repositories/userRoleRepository');
 const AuthService = require('../../auth/authService');
+const UserRoleChecker = require('./userRoleChecker');
+const ForbiddenError = require('../../errors/forbiddenError');
 
 module.exports = class IamEditor {
   constructor(currentUser, language) {
@@ -24,6 +26,7 @@ module.exports = class IamEditor {
       this.transaction = await UserRepository.createTransaction();
 
       await this._loadUser();
+      this._validateAllowedRoles();
       await this._updateAtDatabase();
 
       await UserRepository.commitTransaction(
@@ -86,8 +89,8 @@ module.exports = class IamEditor {
     }
   }
 
-  async _isRemovingOwnOwnerRole() {
-    if (this._roles.includes(Roles.values.owner)) {
+  async _isRemovingOwnManagerRole() {
+    if (this._roles.includes(Roles.values.manager)) {
       return false;
     }
 
@@ -99,7 +102,7 @@ module.exports = class IamEditor {
       this.currentUser.id,
     );
 
-    return currentUserRoles.includes(Roles.values.owner);
+    return currentUserRoles.includes(Roles.values.manager);
   }
 
   async _validate() {
@@ -116,11 +119,37 @@ module.exports = class IamEditor {
     assert(this.data.id, 'id is required');
     assert(this._roles, 'roles is required (can be empty)');
 
-    if (await this._isRemovingOwnOwnerRole()) {
+    if (await this._isRemovingOwnManagerRole()) {
       throw new ValidationError(
         this.language,
         'iam.errors.revokingOwnPermission',
       );
+    }
+  }
+
+  _validateAllowedRoles() {
+    if (UserRoleChecker.isManager(this.currentUser)) {
+      return;
+    }
+
+    const pastRoles = this.user.roles || [];
+
+    if (
+      pastRoles.includes(Roles.values.manager) ||
+      pastRoles.includes(Roles.values.employee)
+    ) {
+      throw new ForbiddenError(this.language);
+    }
+
+    if (!this._roles.includes(Roles.values.petOwner)) {
+      throw new ForbiddenError(this.language);
+    }
+
+    if (
+      this._roles.includes(Roles.values.manager) ||
+      this._roles.includes(Roles.values.employee)
+    ) {
+      throw new ForbiddenError(this.language);
     }
   }
 };

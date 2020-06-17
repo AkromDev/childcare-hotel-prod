@@ -65,7 +65,10 @@ export default class BookingService {
           $data: BookingInput!
           $importHash: String!
         ) {
-          bookingImport(data: $data, importHash: $importHash)
+          bookingImport(
+            data: $data
+            importHash: $importHash
+          )
         }
       `,
 
@@ -187,14 +190,19 @@ export default class BookingService {
     return response.data.bookingList;
   }
 
-  static async listAutocomplete(query, limit) {
+  static async listAutocomplete(query, owner, limit) {
     const response = await graphqlClient.query({
       query: gql`
         query BOOKING_AUTOCOMPLETE(
           $query: String
+          $owner: String
           $limit: Int
         ) {
-          bookingAutocomplete(query: $query, limit: $limit) {
+          bookingAutocomplete(
+            query: $query
+            owner: $owner
+            limit: $limit
+          ) {
             id
             label
           }
@@ -208,5 +216,35 @@ export default class BookingService {
     });
 
     return response.data.bookingAutocomplete;
+  }
+
+  static async isPeriodAvailable(
+    arrival,
+    departure,
+    idToExclude,
+  ) {
+    const response = await graphqlClient.query({
+      query: gql`
+        query BOOKING_PERIOD_AVAILABLE(
+          $arrival: DateTime!
+          $departure: DateTime!
+          $idToExclude: String
+        ) {
+          bookingPeriodAvailable(
+            arrival: $arrival
+            departure: $departure
+            idToExclude: $idToExclude
+          )
+        }
+      `,
+
+      variables: {
+        arrival,
+        departure,
+        idToExclude,
+      },
+    });
+
+    return response.data.bookingPeriodAvailable;
   }
 }

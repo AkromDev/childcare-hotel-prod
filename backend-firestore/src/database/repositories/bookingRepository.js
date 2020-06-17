@@ -2,6 +2,8 @@ const AbstractEntityRepository = require('./abstractEntityRepository');
 const admin = require('firebase-admin');
 const FirebaseQuery = require('../utils/firebaseQuery');
 const Booking = require('../models/booking');
+const moment = require('moment');
+const bookingStatus = require('../../enumerators/bookingStatus');
 
 class BookingRepository extends AbstractEntityRepository {
   constructor() {
@@ -67,10 +69,7 @@ class BookingRepository extends AbstractEntityRepository {
       }
 
       if (filter.arrivalRange) {
-        query.appendRange(
-          'arrival',
-          filter.arrivalRange,
-        );
+        query.appendRange('arrival', filter.arrivalRange);
       }
 
       if (filter.departureRange) {
@@ -80,15 +79,20 @@ class BookingRepository extends AbstractEntityRepository {
         );
       }
 
+      if (filter.period) {
+        query.appendOverlap(
+          'arrival',
+          'departure',
+          filter.period,
+        );
+      }
+
       if (filter.status) {
         query.appendEqual('status', filter.status);
       }
 
       if (filter.feeRange) {
-        query.appendRange(
-          'fee',
-          filter.feeRange,
-        );
+        query.appendRange('fee', filter.feeRange);
       }
 
       if (filter.createdAtRange) {
@@ -111,15 +115,14 @@ class BookingRepository extends AbstractEntityRepository {
     return { rows, count };
   }
 
-  async findAllAutocomplete(search, limit) {
+  async findAllAutocomplete(filter, limit) {
     const query = FirebaseQuery.forAutocomplete({
       limit,
       orderBy: 'id_ASC',
     });
 
-    if (search) {
-      query.appendId('id', search);
-
+    if (filter && filter.search) {
+      query.appendId('id', filter.search);
     }
 
     const collection = await admin
@@ -128,7 +131,13 @@ class BookingRepository extends AbstractEntityRepository {
       .get();
 
     const all = this.mapCollection(collection);
-    const rows = query.rows(all);
+    let rows = query.rows(all);
+
+    if (filter && filter.owner) {
+      rows = rows.filter(
+        (row) => row.owner === filter.owner,
+      );
+    }
 
     return rows.map((record) => ({
       id: record.id,
@@ -147,10 +156,7 @@ class BookingRepository extends AbstractEntityRepository {
       return record;
     }
 
-    record.pet = await this.findRelation(
-      'pet',
-      record.pet,
-    );
+    record.pet = await this.findRelation('pet', record.pet);
 
     record.owner = await this.findRelation(
       'user',
@@ -158,6 +164,53 @@ class BookingRepository extends AbstractEntityRepository {
     );
 
     return record;
+  }
+
+  async existsForPet(petId) {
+    const collection = await admin
+      .firestore()
+      .collection(`booking`)
+      .where('pet', '==', petId)
+      .limit(1)
+      .get();
+
+    return collection.size > 0;
+  }
+
+  async countActiveBookingsInPeriod(
+    start,
+    end,
+    idToExclude,
+  ) {
+    // departure >= start and arrival <= end
+    let query = await admin
+      .firestore()
+      .collection(`booking`)
+      .where('departure', '>=', start)
+      .get();
+
+    const results = this.mapCollection(query);
+
+    if (!results || !results.length) {
+      return 0;
+    }
+
+    const arrivalFilter = (item) =>
+      moment(item.arrival).isSameOrBefore(end);
+
+    const statusFilter = (item) =>
+      [
+        bookingStatus.BOOKED,
+        bookingStatus.PROGRESS,
+      ].includes(item.status);
+
+    const idToExcludeFilter = (item) =>
+      !idToExclude || item.id !== idToExclude;
+
+    return results
+      .filter(arrivalFilter)
+      .filter(idToExcludeFilter)
+      .filter(statusFilter).length;
   }
 }
 

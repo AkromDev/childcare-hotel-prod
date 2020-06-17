@@ -4,18 +4,6 @@ const permissions = Permissions.values;
 
 const privateRoutes = [
   {
-    path: '/',
-    icon: 'home',
-    label: i18n('home.menu'),
-    menu: {
-      exact: true,
-    },
-    loader: () => import('view/home/HomePage'),
-    permissionRequired: null,
-    exact: true,
-  },
-
-  {
     path: '/profile',
     loader: () => import('view/auth/ProfileFormPage'),
     permissionRequired: null,
@@ -85,7 +73,7 @@ const privateRoutes = [
     loader: () => import('view/pet/list/PetListPage'),
     permissionRequired: permissions.petRead,
     exact: true,
-    icon: 'right',
+    icon: 'github',
     label: i18n('entities.pet.menu'),
     menu: true,
   },
@@ -121,16 +109,18 @@ const privateRoutes = [
 
   {
     path: '/booking',
-    loader: () => import('view/booking/list/BookingListPage'),
+    loader: () =>
+      import('view/booking/list/BookingListPage'),
     permissionRequired: permissions.bookingRead,
     exact: true,
-    icon: 'right',
+    icon: 'book',
     label: i18n('entities.booking.menu'),
     menu: true,
   },
   {
     path: '/booking/new',
-    loader: () => import('view/booking/form/BookingFormPage'),
+    loader: () =>
+      import('view/booking/form/BookingFormPage'),
     menu: false,
     permissionRequired: permissions.bookingCreate,
     exact: true,
@@ -145,14 +135,16 @@ const privateRoutes = [
   },
   {
     path: '/booking/:id/edit',
-    loader: () => import('view/booking/form/BookingFormPage'),
+    loader: () =>
+      import('view/booking/form/BookingFormPage'),
     menu: false,
     permissionRequired: permissions.bookingEdit,
     exact: true,
   },
   {
     path: '/booking/:id',
-    loader: () => import('view/booking/view/BookingViewPage'),
+    loader: () =>
+      import('view/booking/view/BookingViewPage'),
     menu: false,
     permissionRequired: permissions.bookingRead,
     exact: true,

@@ -99,15 +99,15 @@ class PetRepository extends AbstractEntityRepository {
     return { rows, count };
   }
 
-  async findAllAutocomplete(search, limit) {
-    const query = FirebaseQuery.forAutocomplete({
+  async findAllAutocomplete(filter, limit) {
+    const firebaseQuery = FirebaseQuery.forAutocomplete({
       limit,
       orderBy: 'name_ASC',
     });
 
-    if (search) {
-      query.appendId('id', search);
-      query.appendIlike('name', search);
+    if (filter && filter.search) {
+      firebaseQuery.appendId('id', filter.search);
+      firebaseQuery.appendIlike('name', filter.search);
     }
 
     const collection = await admin
@@ -116,7 +116,13 @@ class PetRepository extends AbstractEntityRepository {
       .get();
 
     const all = this.mapCollection(collection);
-    const rows = query.rows(all);
+    let rows = firebaseQuery.rows(all);
+
+    if (filter && filter.owner) {
+      rows = rows.filter(
+        (row) => row.owner === filter.owner,
+      );
+    }
 
     return rows.map((record) => ({
       id: record.id,
@@ -141,8 +147,10 @@ class PetRepository extends AbstractEntityRepository {
     );
 
     record.bookings =
-      (await this.findRelation('booking', record.bookings)) ||
-      [];
+      (await this.findRelation(
+        'booking',
+        record.bookings,
+      )) || [];
 
     return record;
   }

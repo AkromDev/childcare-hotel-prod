@@ -1,4 +1,4 @@
-const BookingService = require('../../../services/bookingService');
+const BookingService = require('../../../services/booking/bookingService');
 const PermissionChecker = require('../../../services/iam/permissionChecker');
 const permissions = require('../../../security/permissions')
   .values;
@@ -10,8 +10,9 @@ const schema = `
 
 const resolver = {
   bookingList: async (root, args, context, info) => {
-    new PermissionChecker(context)
-      .validateHas(permissions.bookingRead);
+    new PermissionChecker(context).validateHas(
+      permissions.bookingRead,
+    );
 
     return new BookingService(context).findAndCountAll({
       ...args,

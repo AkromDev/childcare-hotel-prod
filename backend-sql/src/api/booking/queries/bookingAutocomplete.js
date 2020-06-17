@@ -1,19 +1,30 @@
 const PermissionChecker = require('../../../services/iam/permissionChecker');
 const permissions = require('../../../security/permissions')
   .values;
-const BookingService = require('../../../services/bookingService');
+const BookingService = require('../../../services/booking/bookingService');
 
 const schema = `
-  bookingAutocomplete(query: String, limit: Int): [AutocompleteOption!]!
+  bookingAutocomplete(query: String, owner: String, limit: Int): [AutocompleteOption!]!
 `;
 
 const resolver = {
-  bookingAutocomplete: async (root, args, context, info) => {
-    new PermissionChecker(context)
-      .validateHas(permissions.bookingAutocomplete);
+  bookingAutocomplete: async (
+    root,
+    args,
+    context,
+    info,
+  ) => {
+    new PermissionChecker(context).validateHas(
+      permissions.bookingAutocomplete,
+    );
+
+    const filter = {
+      query: args.query,
+      owner: args.owner,
+    };
 
     return new BookingService(context).findAllAutocomplete(
-      args.query,
+      filter,
       args.limit,
     );
   },

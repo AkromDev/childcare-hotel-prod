@@ -19,8 +19,9 @@ class IamViewToolbar extends Component {
     const {
       match,
       user,
-      hasPermissionToEdit,
+      hasPermissionToEditRecord,
       hasPermissionToAuditLogs,
+      hasPermissionToChangeStatus,
       loading,
     } = this.props;
 
@@ -28,7 +29,7 @@ class IamViewToolbar extends Component {
 
     return (
       <Toolbar>
-        {hasPermissionToEdit && (
+        {hasPermissionToEditRecord(user) && (
           <Link to={`/iam/${id}/edit`}>
             <Button type="primary" icon="edit">
               {i18n('common.edit')}
@@ -36,25 +37,24 @@ class IamViewToolbar extends Component {
           </Link>
         )}
 
-        {user &&
-          hasPermissionToEdit && (
-            <Popconfirm
-              title={i18n('common.areYouSure')}
-              onConfirm={() => this.doToggleStatus()}
-              okText={i18n('common.yes')}
-              cancelText={i18n('common.no')}
+        {user && hasPermissionToChangeStatus && (
+          <Popconfirm
+            title={i18n('common.areYouSure')}
+            onConfirm={() => this.doToggleStatus()}
+            okText={i18n('common.yes')}
+            cancelText={i18n('common.no')}
+          >
+            <Button
+              type="primary"
+              icon={user.disabled ? 'check' : 'stop'}
+              disabled={loading}
             >
-              <Button
-                type="primary"
-                icon={user.disabled ? 'check' : 'stop'}
-                disabled={loading}
-              >
-                {user.disabled
-                  ? i18n('iam.enable')
-                  : i18n('iam.disable')}
-              </Button>
-            </Popconfirm>
-          )}
+              {user.disabled
+                ? i18n('iam.enable')
+                : i18n('iam.disable')}
+            </Button>
+          </Popconfirm>
+        )}
 
         {hasPermissionToAuditLogs && (
           <Link
@@ -68,19 +68,17 @@ class IamViewToolbar extends Component {
           </Link>
         )}
 
-        {user &&
-          user.email &&
-          hasPermissionToAuditLogs && (
-            <Link
-              to={`/audit-logs?createdByEmail=${encodeURIComponent(
-                user.email,
-              )}`}
-            >
-              <Button icon="eye">
-                {i18n('iam.view.activity')}
-              </Button>
-            </Link>
-          )}
+        {user && user.email && hasPermissionToAuditLogs && (
+          <Link
+            to={`/audit-logs?createdByEmail=${encodeURIComponent(
+              user.email,
+            )}`}
+          >
+            <Button icon="eye">
+              {i18n('iam.view.activity')}
+            </Button>
+          </Link>
+        )}
       </Toolbar>
     );
   }
@@ -93,7 +91,10 @@ function select(state) {
     hasPermissionToAuditLogs: auditLogSelectors.selectPermissionToRead(
       state,
     ),
-    hasPermissionToEdit: iamSelectors.selectPermissionToEdit(
+    hasPermissionToEditRecord: iamSelectors.selectPermissionToEditRecord(
+      state,
+    ),
+    hasPermissionToChangeStatus: iamSelectors.selectPermissionToChangeStatus(
       state,
     ),
   };

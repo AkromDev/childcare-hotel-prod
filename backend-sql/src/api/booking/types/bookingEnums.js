@@ -1,9 +1,11 @@
+const bookingStatus = require('../../../enumerators/bookingStatus');
+
 const schema = `
   enum BookingStatusEnum {
-    booked
-    progress
-    cancelled
-    completed
+    ${bookingStatus.BOOKED}
+    ${bookingStatus.PROGRESS}
+    ${bookingStatus.CANCELLED}
+    ${bookingStatus.COMPLETED}
   }
 `;
 

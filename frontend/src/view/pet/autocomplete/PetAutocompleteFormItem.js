@@ -4,7 +4,8 @@ import PetService from 'modules/pet/petService';
 
 class PetAutocompleteFormItem extends Component {
   fetchFn = (value) => {
-    return PetService.listAutocomplete(value, 10);
+    const { owner } = this.props;
+    return PetService.listAutocomplete(value, owner, 10);
   };
 
   mapper = {

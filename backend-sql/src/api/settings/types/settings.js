@@ -1,6 +1,8 @@
 const schema = `
   type Settings {
     theme: String!
+    dailyFee: Float
+    capacity: Int
   }
 `;
 

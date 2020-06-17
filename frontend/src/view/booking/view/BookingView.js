@@ -7,6 +7,9 @@ import UserViewItem from 'view/iam/view/UserViewItem';
 import ImagesViewItem from 'view/shared/view/ImagesViewItem';
 import FilesViewItem from 'view/shared/view/FilesViewItem';
 import PetViewItem from 'view/pet/view/PetViewItem';
+import CustomViewItem from 'view/shared/view/CustomViewItem';
+import { bookingStatusColor } from 'modules/booking/bookingStatus';
+import { Tag } from 'antd';
 
 const { fields } = model;
 
@@ -43,12 +46,16 @@ class BookingView extends Component {
 
         <TextViewItem
           label={fields.clientNotes.label}
-          value={fields.clientNotes.forView(record.clientNotes)}
+          value={fields.clientNotes.forView(
+            record.clientNotes,
+          )}
         />
 
         <TextViewItem
           label={fields.employeeNotes.label}
-          value={fields.employeeNotes.forView(record.employeeNotes)}
+          value={fields.employeeNotes.forView(
+            record.employeeNotes,
+          )}
         />
 
         <ImagesViewItem
@@ -56,14 +63,25 @@ class BookingView extends Component {
           value={fields.photos.forView(record.photos)}
         />
 
-        <TextViewItem
+        <CustomViewItem
           label={fields.status.label}
           value={fields.status.forView(record.status)}
+          render={(value) => {
+            return (
+              <Tag
+                color={bookingStatusColor(record.status)}
+              >
+                {value}
+              </Tag>
+            );
+          }}
         />
 
         <TextViewItem
           label={fields.cancellationNotes.label}
-          value={fields.cancellationNotes.forView(record.cancellationNotes)}
+          value={fields.cancellationNotes.forView(
+            record.cancellationNotes,
+          )}
         />
 
         <TextViewItem

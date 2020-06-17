@@ -4,7 +4,12 @@ import BookingService from 'modules/booking/bookingService';
 
 class BookingAutocompleteFormItem extends Component {
   fetchFn = (value) => {
-    return BookingService.listAutocomplete(value, 10);
+    const { owner } = this.props;
+    return BookingService.listAutocomplete(
+      value,
+      owner,
+      10,
+    );
   };
 
   mapper = {

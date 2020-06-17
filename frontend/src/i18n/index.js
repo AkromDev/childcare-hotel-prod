@@ -16,6 +16,8 @@ const languages = {
     flag: '/images/flags/24/United-States.png',
     dictionary: en,
     antd: undefined,
+    currency: 'USD',
+    currencyLocale: 'en-US',
   },
   'pt-BR': {
     id: 'pt-BR',
@@ -23,6 +25,8 @@ const languages = {
     flag: '/images/flags/24/Brazil.png',
     dictionary: ptBR,
     antd: antd_pt_BR,
+    currency: 'BRL',
+    currencyLocale: 'pt-BR',
   },
 };
 
@@ -32,7 +36,7 @@ function init() {
   setLanguageCode(currentLanguageCode);
 }
 
-function getLanguage() {
+export function getLanguage() {
   return languages[getLanguageCode()];
 }
 

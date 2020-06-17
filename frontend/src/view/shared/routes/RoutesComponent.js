@@ -6,6 +6,7 @@ import {
   Route,
   Switch,
   withRouter,
+  Redirect,
 } from 'react-router-dom';
 import EmailUnverifiedRoute from 'view/shared/routes/EmailUnverifiedRoute';
 import EmptyPermissionsRoute from 'view/shared/routes/EmptyPermissionsRoute';
@@ -43,6 +44,18 @@ class RoutesComponent extends Component {
 
     return (
       <Switch>
+        <Route
+          exact
+          path="/"
+          render={() =>
+            this.props.redirectToNewPet ? (
+              <Redirect to="/pet/new" />
+            ) : (
+              <Redirect to="/booking" />
+            )
+          }
+        />
+
         {routes.publicRoutes.map((route) => (
           <PublicRoute
             key={route.path}
@@ -112,6 +125,9 @@ const select = (state) => ({
     authSelectors.selectLoadingInit(state) ||
     layoutSelectors.selectLoading(state),
   currentUser: authSelectors.selectCurrentUser(state),
+  redirectToNewPet: authSelectors.selectRedirectToNewPet(
+    state,
+  ),
 });
 
 export default withRouter(connect(select)(RoutesComponent));

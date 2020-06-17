@@ -22,65 +22,65 @@ const en = {
   },
 
   app: {
-    title: '',
+    title: 'Pet Hotel',
   },
 
   entities: {
     pet: {
       name: 'pet',
-      label: '',
-      menu: '',
+      label: 'Pets',
+      menu: 'Pets',
       exporterFileName: 'pet_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Pets',
+        title: 'Pets',
       },
       create: {
-        success: 'pet saved successfully',
+        success: 'Pet saved successfully',
       },
       update: {
-        success: 'pet saved successfully',
+        success: 'Pet saved successfully',
       },
       destroy: {
-        success: 'pet deleted successfully',
+        success: 'Pet deleted successfully',
       },
       destroyAll: {
-        success: 'pet(s) deleted successfully',
+        success: 'Pet(s) deleted successfully',
       },
       edit: {
-        title: 'Edit pet',
+        title: 'Edit Pet',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'name': '',
-        'type': '',
-        'breed': '',
-        'size': '',
-        'bookings': '',
+        id: 'Id',
+        owner: 'Owner',
+        name: 'Name',
+        type: 'Type',
+        breed: 'Breed',
+        size: 'Size',
+        bookings: 'Bookings',
         createdAt: 'Created at',
         updatedAt: 'Updated at',
         createdAtRange: 'Created at',
       },
       enumerators: {
-        'type': {
-          'cat': '',
-          'dog': '',
+        type: {
+          cat: 'Cat',
+          dog: 'Dog',
         },
-        'size': {
-          'small': '',
-          'medium': '',
-          'large': '',
+        size: {
+          small: 'Small',
+          medium: 'Medium',
+          large: 'Large',
         },
       },
       new: {
-        title: 'New pet',
+        title: 'New Pet',
       },
       view: {
-        title: 'View pet',
+        title: 'View Pet',
       },
       importer: {
-        title: 'Import pets',
+        title: 'Import Pets',
         fileName: 'pet_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
@@ -89,67 +89,73 @@ const en = {
 
     booking: {
       name: 'booking',
-      label: '',
-      menu: '',
+      label: 'Bookings',
+      menu: 'Bookings',
       exporterFileName: 'booking_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Bookings',
+        title: 'Bookings',
       },
       create: {
-        success: 'booking saved successfully',
+        success: 'Booking saved successfully',
       },
       update: {
-        success: 'booking saved successfully',
+        success: 'Booking saved successfully',
       },
       destroy: {
-        success: 'booking deleted successfully',
+        success: 'Booking deleted successfully',
       },
       destroyAll: {
-        success: 'booking(s) deleted successfully',
+        success: 'Booking(s) deleted successfully',
       },
       edit: {
-        title: 'Edit booking',
+        title: 'Edit Booking',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'pet': '',
-        'arrivalRange': '',
-        'arrival': '',
-        'departureRange': '',
-        'departure': '',
-        'clientNotes': '',
-        'employeeNotes': '',
-        'photos': '',
-        'status': '',
-        'cancellationNotes': '',
-        'feeRange': '',
-        'fee': '',
-        'receipt': '',
+        id: 'Id',
+        owner: 'Owner',
+        pet: 'Pet',
+        arrivalRange: 'Arrival',
+        arrival: 'Arrival',
+        departureRange: 'Departure',
+        departure: 'Departure',
+        clientNotes: 'Notes',
+        employeeNotes: 'Employee Notes',
+        photos: 'Photos',
+        status: 'Status',
+        cancellationNotes: 'Cancellation Notes',
+        feeRange: 'Total Fee',
+        fee: 'Total Fee',
+        receipt: 'Receipt',
         createdAt: 'Created at',
         updatedAt: 'Updated at',
         createdAtRange: 'Created at',
+        period: 'Period',
       },
       enumerators: {
-        'status': {
-          'booked': '',
-          'progress': '',
-          'cancelled': '',
-          'completed': '',
+        status: {
+          booked: 'Booked',
+          progress: 'In Progress',
+          cancelled: 'Cancelled',
+          completed: 'Completed',
         },
       },
       new: {
-        title: 'New booking',
+        title: 'New Booking',
       },
       view: {
-        title: 'View booking',
+        title: 'View Booking',
       },
       importer: {
-        title: 'Import bookings',
+        title: 'Import Bookings',
         fileName: 'booking_import_template',
         hint:
           'Files/Images columns must be the URLs of the files separated by space.',
+      },
+      validation: {
+        periodPast: 'The period must be in the future',
+        periodFull:
+          'Sorry, the Pet Hotel is full at this time',
       },
     },
   },
@@ -188,55 +194,23 @@ const en = {
   },
 
   roles: {
-    owner: {
-      label: 'Owner',
+    manager: {
+      label: 'Manager',
       description: 'Full access to all resources',
     },
-    editor: {
-      label: 'Editor',
-      description: 'Edit access to all resources',
+    employee: {
+      label: 'Employee',
+      description: 'Employee access',
     },
-    viewer: {
-      label: 'Viewer',
-      description: 'View access to all resources',
-    },
-    auditLogViewer: {
-      label: 'Audit Log Viewer',
-      description: 'Access to view audit logs',
-    },
-    iamSecurityReviewer: {
-      label: 'Security Reviewer',
-      description: `Full access to manage users roles`,
-    },
-    entityEditor: {
-      label: 'Entity Editor',
-      description: 'Edit access to all entities',
-    },
-    entityViewer: {
-      label: 'Entity Viewer',
-      description: 'View access to all entities',
-    },
-    petEditor: {
-      label: 'pet Editor',
-      description: 'Edit access to pet',
-    },
-    petViewer: {
-      label: 'pet Viewer',
-      description: 'View access to pet',
-    },
-    bookingEditor: {
-      label: 'booking Editor',
-      description: 'Edit access to booking',
-    },
-    bookingViewer: {
-      label: 'booking Viewer',
-      description: 'View access to booking',
+    petOwner: {
+      label: 'Pet Owner',
+      description: 'Pet owner access',
     },
   },
 
   iam: {
-    title: 'Identity and Access Management',
-    menu: 'IAM',
+    title: 'Users',
+    menu: 'Users',
     disable: 'Disable',
     disabled: 'Disabled',
     enabled: 'Enabled',
@@ -283,7 +257,7 @@ const en = {
         'User with this email already exists',
       userNotFound: 'User not found',
       disablingHimself: `You can't disable yourself`,
-      revokingOwnPermission: `You can't revoke your own owner permission`,
+      revokingOwnPermission: `You can't revoke your own manager permission`,
     },
   },
 
@@ -344,6 +318,8 @@ const en = {
     },
     fields: {
       theme: 'Theme',
+      dailyFee: 'Daily Fee',
+      capacity: 'Capacity',
     },
     colors: {
       default: 'Default',
@@ -362,34 +338,6 @@ const en = {
   },
   home: {
     menu: 'Home',
-    message: `This page uses fake data for demonstration purposes only. You can edit it at frontend/view/home/HomePage.js.`,
-    charts: {
-      day: 'Day',
-      red: 'Red',
-      green: 'Green',
-      yellow: 'Yellow',
-      grey: 'Grey',
-      blue: 'Blue',
-      sales: 'Sales',
-      visitor: 'Visitors',
-      months: {
-        1: 'January',
-        2: 'February',
-        3: 'March',
-        4: 'April',
-        5: 'May',
-        6: 'June',
-        7: 'July',
-      },
-      eating: 'Eating',
-      drinking: 'Drinking',
-      sleeping: 'Sleeping',
-      designing: 'Designing',
-      coding: 'Coding',
-      cycling: 'Cycling',
-      running: 'Running',
-      customer: 'Customer',
-    },
   },
   errors: {
     backToHome: 'Back to home',

@@ -40,13 +40,13 @@ class AuthUserWriter {
           authUser.email.split('@')[0],
         email: authUser.email,
         authenticationUid: authUser.uid,
-        roles: isFirstUser ? [Roles.values.owner] : [],
+        roles: isFirstUser
+          ? [Roles.values.manager]
+          : [Roles.values.petOwner],
       },
     );
 
-    return await UserRepository.findById(
-      createdDatabaseUser.id,
-    );
+    return createdDatabaseUser;
   }
 }
 

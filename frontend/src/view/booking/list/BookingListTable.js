@@ -1,4 +1,4 @@
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, Tag } from 'antd';
 import { i18n } from 'i18n';
 import actions from 'modules/booking/list/bookingListActions';
 import destroyActions from 'modules/booking/destroy/bookingDestroyActions';
@@ -14,6 +14,8 @@ import ButtonLink from 'view/shared/styles/ButtonLink';
 import UserListItem from 'view/iam/list/users/UserListItem';
 import FilesListView from 'view/shared/list/FileListView';
 import PetListItem from 'view/pet/list/PetListItem';
+import authSelectors from 'modules/auth/authSelectors';
+import { bookingStatusColor } from 'modules/booking/bookingStatus';
 
 const { fields } = model;
 
@@ -33,15 +35,22 @@ class BookingListTable extends Component {
 
   columns = [
     fields.id.forTable(),
-    fields.owner.forTable({
-      render: (value) => <UserListItem value={value} />,
-    }),
+    !this.props.isPetOwner &&
+      fields.owner.forTable({
+        render: (value) => <UserListItem value={value} />,
+      }),
     fields.pet.forTable({
       render: (value) => <PetListItem value={value} />,
     }),
     fields.arrival.forTable(),
     fields.departure.forTable(),
-    fields.status.forTable(),
+    fields.status.forTable({
+      render: (value) => (
+        <Tag color={bookingStatusColor(value)}>
+          {fields.status.forView(value)}
+        </Tag>
+      ),
+    }),
     fields.fee.forTable(),
     fields.receipt.forTable({
       render: (value) => <FilesListView value={value} />,
@@ -56,7 +65,7 @@ class BookingListTable extends Component {
           <Link to={`/booking/${record.id}`}>
             {i18n('common.view')}
           </Link>
-          {this.props.hasPermissionToEdit && (
+          {this.props.hasPermissionToEditRecord(record) && (
             <Link to={`/booking/${record.id}/edit`}>
               {i18n('common.edit')}
             </Link>
@@ -76,7 +85,7 @@ class BookingListTable extends Component {
         </div>
       ),
     },
-  ];
+  ].filter(Boolean);
 
   rowSelection = () => {
     return {
@@ -117,10 +126,13 @@ function select(state) {
     pagination: selectors.selectPagination(state),
     filter: selectors.selectFilter(state),
     selectedKeys: selectors.selectSelectedKeys(state),
-    hasPermissionToEdit: bookingSelectors.selectPermissionToEdit(
+    hasPermissionToEditRecord: bookingSelectors.selectPermissionToEditRecord(
       state,
     ),
     hasPermissionToDestroy: bookingSelectors.selectPermissionToDestroy(
+      state,
+    ),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
       state,
     ),
   };

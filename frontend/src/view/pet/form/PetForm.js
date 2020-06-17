@@ -15,7 +15,7 @@ import FormSchema from 'view/shared/form/formSchema';
 import InputFormItem from 'view/shared/form/items/InputFormItem';
 import UserAutocompleteFormItem from 'view/iam/autocomplete/UserAutocompleteFormItem';
 import SelectFormItem from 'view/shared/form/items/SelectFormItem';
-import BookingAutocompleteFormItem from 'view/booking/autocomplete/BookingAutocompleteFormItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -26,7 +26,6 @@ class PetForm extends Component {
     fields.type,
     fields.breed,
     fields.size,
-    fields.bookings,
   ]);
 
   componentDidMount() {
@@ -62,11 +61,17 @@ class PetForm extends Component {
       return this.schema.initialValues(record);
     }
 
-    return this.schema.initialValues();
+    const initialValues = {};
+
+    if (this.props.isPetOwner) {
+      initialValues.owner = this.props.currentUser;
+    }
+
+    return this.schema.initialValues(initialValues);
   };
 
   renderForm() {
-    const { saveLoading } = this.props;
+    const { saveLoading, isPetOwner } = this.props;
 
     return (
       <FormWrapper>
@@ -84,11 +89,13 @@ class PetForm extends Component {
                   />
                 )}
 
-                <UserAutocompleteFormItem
-                  name={fields.owner.name}
-                  label={fields.owner.label}
-                  required={fields.owner.required}
-                />
+                {!isPetOwner && (
+                  <UserAutocompleteFormItem
+                    name={fields.owner.name}
+                    label={fields.owner.label}
+                    required={fields.owner.required}
+                  />
+                )}
                 <InputFormItem
                   name={fields.name.name}
                   label={fields.name.label}
@@ -120,12 +127,6 @@ class PetForm extends Component {
                     }),
                   )}
                   required={fields.size.required}
-                />
-                <BookingAutocompleteFormItem
-                  name={fields.bookings.name}
-                  label={fields.bookings.label}
-                  required={fields.bookings.required}
-                  mode="multiple"
                 />
 
                 <Form.Item
@@ -177,6 +178,10 @@ function select(state) {
     findLoading: selectors.selectFindLoading(state),
     saveLoading: selectors.selectSaveLoading(state),
     record: selectors.selectRecord(state),
+    currentUser: authSelectors.selectCurrentUser(state),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
   };
 }
 

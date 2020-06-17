@@ -1,8 +1,11 @@
 const assert = require('assert');
 const InvitationEmail = require('../../emails/invitationEmail');
 const ValidationError = require('../../errors/validationError');
+const ForbiddenError = require('../../errors/forbiddenError');
 const EmailSender = require('../shared/email/emailSender');
 const UserRepository = require('../../database/repositories/userRepository');
+const UserRoleChecker = require('./userRoleChecker');
+const Roles = require('../../security/roles');
 
 module.exports = class IamCreator {
   constructor(currentUser, language) {
@@ -186,5 +189,24 @@ module.exports = class IamCreator {
       this._roles && this._roles.length,
       'roles is required',
     );
+
+    this._validateAllowedRoles();
+  }
+
+  _validateAllowedRoles() {
+    if (UserRoleChecker.isManager(this.currentUser)) {
+      return;
+    }
+
+    if (!this._roles.includes(Roles.values.petOwner)) {
+      throw new ForbiddenError(this.language);
+    }
+
+    if (
+      this._roles.includes(Roles.values.manager) ||
+      this._roles.includes(Roles.values.employee)
+    ) {
+      throw new ForbiddenError(this.language);
+    }
   }
 };

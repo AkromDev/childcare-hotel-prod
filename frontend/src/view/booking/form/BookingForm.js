@@ -20,6 +20,14 @@ import DatePickerFormItem from 'view/shared/form/items/DatePickerFormItem';
 import ImagesFormItem from 'view/shared/form/items/ImagesFormItem';
 import FilesFormItem from 'view/shared/form/items/FilesFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import authSelectors from 'modules/auth/authSelectors';
+import bookingStatus from 'modules/booking/bookingStatus';
+import UserViewItem from 'view/iam/view/UserViewItem';
+import PetViewItem from 'view/pet/view/PetViewItem';
+import DatePickerRangeFormItem from 'view/shared/form/items/DatePickerRangeFormItem';
+import settingsActions from 'modules/settings/settingsActions';
+import settingsSelectors from 'modules/settings/settingsSelectors';
+import BookingFeeCalculator from 'modules/booking/bookingFeeCalculator';
 
 const { fields } = model;
 
@@ -36,10 +44,13 @@ class BookingForm extends Component {
     fields.cancellationNotes,
     fields.fee,
     fields.receipt,
+    fields.period,
   ]);
 
   componentDidMount() {
     const { dispatch, match } = this.props;
+
+    dispatch(settingsActions.doFind());
 
     if (this.isEditing()) {
       dispatch(actions.doFind(match.params.id));
@@ -48,14 +59,155 @@ class BookingForm extends Component {
     }
   }
 
+  isOwnerEnabled = () => {
+    const { isPetOwner, isManager, record } = this.props;
+
+    if (isManager) {
+      return true;
+    }
+
+    if (isPetOwner) {
+      return false;
+    }
+
+    if (!this.isEditing()) {
+      return true;
+    }
+
+    if (!record || !record.status) {
+      return false;
+    }
+
+    return record.status === bookingStatus.BOOKED;
+  };
+
+  isOwnerVisible = () => {
+    return !this.isOwnerEnabled() && this.props.record;
+  };
+
+  isPetEnabled = (form) => {
+    if (!form.values.owner) {
+      return false;
+    }
+
+    if (!this.isEditing()) {
+      return true;
+    }
+
+    const { record, isManager } = this.props;
+
+    if (isManager) {
+      return true;
+    }
+
+    if (!record || !record.status) {
+      return false;
+    }
+
+    return record.status === bookingStatus.BOOKED;
+  };
+
+  isPetVisible = (form) => {
+    return !this.isPetEnabled(form) && form.values.pet;
+  };
+
   isEditing = () => {
     const { match } = this.props;
     return !!match.params.id;
   };
 
+  isStatusEnabled = () => {
+    const { isPetOwner } = this.props;
+
+    if (this.isEditing()) {
+      return true;
+    }
+
+    return !isPetOwner;
+  };
+
+  isEmployeeNotesAndPhotosEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.PROGRESS;
+  };
+
+  isCancellationNotesEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.CANCELLED;
+  };
+
+  isReceiptEnabled = (form) => {
+    if (this.props.isManager) {
+      return true;
+    }
+
+    return form.values.status === bookingStatus.COMPLETED;
+  };
+
+  isFeeVisible = (form) => {
+    return form.values.fee;
+  };
+
+  statusOptions = () => {
+    const {
+      isPetOwner,
+      isManager,
+      isEmployee,
+    } = this.props;
+
+    if (isPetOwner) {
+      return this.statusOptionsPetOwner();
+    }
+
+    if (isEmployee) {
+      return this.statusOptionsEmployee();
+    }
+
+    if (isManager) {
+      return this.statusOptionsManager();
+    }
+  };
+
+  statusOptionsManager = () => {
+    return fields.status.options;
+  };
+
+  statusOptionsEmployee = () => {
+    const { record } = this.props;
+    const options = fields.status.options;
+
+    if (!this.isEditing()) {
+      return options;
+    }
+
+    if (record.status === bookingStatus.BOOKED) {
+      return options;
+    }
+
+    return options.filter(
+      (option) => option.id !== bookingStatus.BOOKED,
+    );
+  };
+
+  statusOptionsPetOwner = () => {
+    return fields.status.options.filter((option) => {
+      return [
+        bookingStatus.BOOKED,
+        bookingStatus.CANCELLED,
+      ].includes(option.id);
+    });
+  };
+
   handleSubmit = (values) => {
     const { dispatch } = this.props;
     const { id, ...data } = this.schema.cast(values);
+    delete data.period;
 
     if (this.isEditing()) {
       dispatch(actions.doUpdate(id, data));
@@ -68,14 +220,43 @@ class BookingForm extends Component {
     const record = this.props.record;
 
     if (this.isEditing() && record) {
+      record.period = [record.arrival, record.departure];
       return this.schema.initialValues(record);
     }
 
-    return this.schema.initialValues();
+    const initialValues = {
+      status: bookingStatus.BOOKED,
+    };
+
+    if (this.props.isPetOwner) {
+      initialValues.owner = this.props.currentUser;
+    }
+
+    return this.schema.initialValues(initialValues);
+  };
+
+  onPeriodChange(value, form) {
+    form.setFieldTouched('period');
+    form.setFieldValue('period', value);
+    form.setFieldValue('arrival', value[0]);
+    form.setFieldValue('departure', value[1]);
+    this.calculateAndSetFee(value[0], value[1], form);
+  }
+
+  calculateAndSetFee = (arrival, departure, form) => {
+    const { dailyFee } = this.props;
+
+    const fee = BookingFeeCalculator.calculate(
+      arrival,
+      departure,
+      dailyFee,
+    );
+
+    form.setFieldValue('fee', fee);
   };
 
   renderForm() {
-    const { saveLoading } = this.props;
+    const { saveLoading, record } = this.props;
 
     return (
       <FormWrapper>
@@ -93,87 +274,135 @@ class BookingForm extends Component {
                   />
                 )}
 
-                <UserAutocompleteFormItem
-                  name={fields.owner.name}
-                  label={fields.owner.label}
-                  required={fields.owner.required}
-                />
-                <PetAutocompleteFormItem
-                  name={fields.pet.name}
-                  label={fields.pet.label}
-                  required={fields.pet.required}
-                />
-                <DatePickerFormItem
-                  name={fields.arrival.name}
-                  label={fields.arrival.label}
-                  required={fields.arrival.required}
+                {this.isOwnerEnabled() && (
+                  <UserAutocompleteFormItem
+                    name={fields.owner.name}
+                    label={fields.owner.label}
+                    required={fields.owner.required}
+                  />
+                )}
+
+                {this.isOwnerVisible() && (
+                  <UserViewItem
+                    label={fields.owner.label}
+                    value={fields.owner.forView(
+                      record.owner,
+                    )}
+                  />
+                )}
+
+                {this.isPetEnabled(form) && (
+                  <PetAutocompleteFormItem
+                    name={fields.pet.name}
+                    label={fields.pet.label}
+                    required={fields.pet.required}
+                    owner={
+                      form.values.owner
+                        ? form.values.owner.id
+                        : null
+                    }
+                  />
+                )}
+
+                {this.isPetVisible(form) && (
+                  <PetViewItem
+                    label={fields.pet.label}
+                    value={fields.pet.forView(record.pet)}
+                  />
+                )}
+
+                <DatePickerRangeFormItem
+                  name={fields.period.name}
+                  label={fields.period.label}
+                  required={fields.period.required}
                   showTime
+                  inputProps={{
+                    onChange: (value) => {
+                      this.onPeriodChange(value, form);
+                    },
+                  }}
                 />
-                <DatePickerFormItem
-                  name={fields.departure.name}
-                  label={fields.departure.label}
-                  required={fields.departure.required}
-                  showTime
-                />
+
                 <TextAreaFormItem
                   name={fields.clientNotes.name}
                   label={fields.clientNotes.label}
                   required={fields.clientNotes.required}
                 />
-                <TextAreaFormItem
-                  name={fields.employeeNotes.name}
-                  label={fields.employeeNotes.label}
-                  required={fields.employeeNotes.required}
-                />
-                <ImagesFormItem
-                  name={fields.photos.name}
-                  label={fields.photos.label}
-                  required={fields.photos.required}
-                  path={fields.photos.path}
-                  schema={{
-                    size: fields.photos.size,
-                  }}
-                  max={fields.photos.max}
-                />
-                <SelectFormItem
-                  name={fields.status.name}
-                  label={fields.status.label}
-                  options={fields.status.options.map(
-                    (item) => ({
-                      value: item.id,
-                      label: item.label,
-                    }),
-                  )}
-                  required={fields.status.required}
-                />
-                <TextAreaFormItem
-                  name={fields.cancellationNotes.name}
-                  label={fields.cancellationNotes.label}
-                  required={fields.cancellationNotes.required}
-                />
-                <InputFormItem
-                  name={fields.fee.name}
-                  label={fields.fee.label}
-                  required={fields.fee.required}
-                />
-                <FilesFormItem
-                  name={fields.receipt.name}
-                  label={fields.receipt.label}
-                  required={fields.receipt.required}
-                  path={fields.receipt.path}
-                  schema={{
-                    size: fields.receipt.size,
-                    formats: fields.receipt.formats,
-                  }}
-                  max={fields.receipt.max}
-                />
+                {this.isEmployeeNotesAndPhotosEnabled(
+                  form,
+                ) && (
+                  <React.Fragment>
+                    <TextAreaFormItem
+                      name={fields.employeeNotes.name}
+                      label={fields.employeeNotes.label}
+                      required={
+                        fields.employeeNotes.required
+                      }
+                    />
+                    <ImagesFormItem
+                      name={fields.photos.name}
+                      label={fields.photos.label}
+                      required={fields.photos.required}
+                      path={fields.photos.path}
+                      schema={{
+                        size: fields.photos.size,
+                      }}
+                      max={fields.photos.max}
+                    />
+                  </React.Fragment>
+                )}
+                {this.isStatusEnabled() && (
+                  <SelectFormItem
+                    name={fields.status.name}
+                    label={fields.status.label}
+                    options={this.statusOptions().map(
+                      (item) => ({
+                        value: item.id,
+                        label: item.label,
+                      }),
+                    )}
+                    required={fields.status.required}
+                  />
+                )}
+                {this.isCancellationNotesEnabled(form) && (
+                  <TextAreaFormItem
+                    name={fields.cancellationNotes.name}
+                    label={fields.cancellationNotes.label}
+                    required={
+                      fields.cancellationNotes.required
+                    }
+                  />
+                )}
+                {this.isFeeVisible(form) && (
+                  <ViewFormItem
+                    name={fields.fee.name}
+                    label={fields.fee.label}
+                    required={fields.fee.required}
+                    formatter={fields.fee.forView}
+                  />
+                )}
+                {this.isReceiptEnabled(form) && (
+                  <FilesFormItem
+                    name={fields.receipt.name}
+                    label={fields.receipt.label}
+                    required={fields.receipt.required}
+                    path={fields.receipt.path}
+                    schema={{
+                      size: fields.receipt.size,
+                      formats: fields.receipt.formats,
+                    }}
+                    max={fields.receipt.max}
+                  />
+                )}
 
                 <Form.Item
                   className="form-buttons"
                   {...tailFormItemLayout}
                 >
                   <Button
-                    loading={saveLoading}
+                    loading={
+                      saveLoading || form.isSubmitting
+                    }
                     type="primary"
                     htmlType="submit"
                     icon="save"
@@ -182,7 +411,9 @@ class BookingForm extends Component {
                   </Button>
 
                   <Button
-                    disabled={saveLoading}
+                    disabled={
+                      saveLoading || form.isSubmitting
+                    }
                     onClick={form.handleReset}
                     icon="undo"
                   >
@@ -214,9 +445,22 @@ class BookingForm extends Component {
 
 function select(state) {
   return {
-    findLoading: selectors.selectFindLoading(state),
+    findLoading:
+      selectors.selectFindLoading(state) ||
+      settingsSelectors.selectFindLoading(state),
     saveLoading: selectors.selectSaveLoading(state),
     record: selectors.selectRecord(state),
+    currentUser: authSelectors.selectCurrentUser(state),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
+    isEmployee: authSelectors.selectCurrentUserIsEmployee(
+      state,
+    ),
+    isManager: authSelectors.selectCurrentUserIsManager(
+      state,
+    ),
+    dailyFee: settingsSelectors.selectDailyFee(state),
   };
 }
 

@@ -22,66 +22,66 @@ const ptBR = {
   },
 
   app: {
-    title: '',
+    title: 'Pet Hotel',
   },
 
   entities: {
     pet: {
       name: 'pet',
-      label: '',
-      menu: '',
-      exporterFileName: 'pet_exportados',
+      label: 'Pets',
+      menu: 'Pets',
+      exporterFileName: 'pet_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Pets',
+        title: 'Pets',
       },
       create: {
-        success: 'pet salvo com sucesso',
+        success: 'Pet salvo com sucesso',
       },
       update: {
-        success: 'pet salvo com sucesso',
+        success: 'Pet salvo com sucesso',
       },
       destroy: {
-        success: 'pet deletado com sucesso',
+        success: 'Pet deletado com sucesso',
       },
       destroyAll: {
-        success: 'pet(s) deletado com sucesso',
+        success: 'Pet(s) deletado com sucesso',
       },
       edit: {
-        title: 'Editar pet',
+        title: 'Editar Pet',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'name': '',
-        'type': '',
-        'breed': '',
-        'size': '',
-        'bookings': '',
+        id: 'Id',
+        owner: 'Dono',
+        name: 'Nome',
+        type: 'Tipo',
+        breed: 'Raça',
+        size: 'Tamanho',
+        bookings: 'Reservas',
         createdAt: 'Criado em',
         updatedAt: 'Atualizado em',
         createdAtRange: 'Criado em',
       },
       enumerators: {
-        'type': {
-          'cat': '',
-          'dog': '',
+        type: {
+          cat: 'Gato',
+          dog: 'Cachorro',
         },
-        'size': {
-          'small': '',
-          'medium': '',
-          'large': '',
+        size: {
+          small: 'Pequeno',
+          medium: 'Médio',
+          large: 'Grande',
         },
       },
       new: {
-        title: 'Novo pet',
+        title: 'Novo Pet',
       },
       view: {
-        title: 'Visualizar pet',
+        title: 'Visualizar Pet',
       },
       importer: {
-        title: 'Importar pets',
-        fileName: 'pet_template_importacao',
+        title: 'Importar Pets',
+        fileName: 'pet_import_template',
         hint:
           'Arquivos/Imagens devem ser as URLs dos arquivos, separados por espaço. Relacionamentos devem ser os IDs separados por espaço.',
       },
@@ -89,67 +89,73 @@ const ptBR = {
 
     booking: {
       name: 'booking',
-      label: '',
-      menu: '',
-      exporterFileName: 'booking_exportados',
+      label: 'Reservas',
+      menu: 'Reservas',
+      exporterFileName: 'booking_export',
       list: {
-        menu: '',
-        title: '',
+        menu: 'Reservas',
+        title: 'Reservas',
       },
       create: {
-        success: 'booking salvo com sucesso',
+        success: 'Reserva salvo com sucesso',
       },
       update: {
-        success: 'booking salvo com sucesso',
+        success: 'Reserva salvo com sucesso',
       },
       destroy: {
-        success: 'booking deletado com sucesso',
+        success: 'Reserva deletado com sucesso',
       },
       destroyAll: {
-        success: 'booking(s) deletado com sucesso',
+        success: 'Reserva(s) deletado com sucesso',
       },
       edit: {
-        title: 'Editar booking',
+        title: 'Editar Reserva',
       },
       fields: {
-        id: '',
-        'owner': '',
-        'pet': '',
-        'arrivalRange': '',
-        'arrival': '',
-        'departureRange': '',
-        'departure': '',
-        'clientNotes': '',
-        'employeeNotes': '',
-        'photos': '',
-        'status': '',
-        'cancellationNotes': '',
-        'feeRange': '',
-        'fee': '',
-        'receipt': '',
+        id: 'Id',
+        owner: 'Dono',
+        pet: 'Pet',
+        arrivalRange: 'Chegada',
+        arrival: 'Chegada',
+        departureRange: 'Saída',
+        departure: 'Saída',
+        clientNotes: 'Observações',
+        employeeNotes: 'Observações do Funcionário',
+        photos: 'Fotos',
+        status: 'Status',
+        cancellationNotes: 'Notas de Cancelamento',
+        feeRange: 'Valor Total',
+        fee: 'Valor Total',
+        receipt: 'Recibo',
         createdAt: 'Criado em',
         updatedAt: 'Atualizado em',
         createdAtRange: 'Criado em',
+        period: 'Período',
       },
       enumerators: {
-        'status': {
-          'booked': '',
-          'progress': '',
-          'cancelled': '',
-          'completed': '',
+        status: {
+          booked: 'Reservado',
+          progress: 'Em progresso',
+          cancelled: 'Cancelado',
+          completed: 'Completado',
         },
       },
       new: {
-        title: 'Novo booking',
+        title: 'Nova Reserva',
       },
       view: {
-        title: 'Visualizar booking',
+        title: 'Visualizar Reserva',
       },
       importer: {
-        title: 'Importar bookings',
-        fileName: 'booking_template_importacao',
+        title: 'Importar Reservas',
+        fileName: 'reserva_import_template',
         hint:
           'Arquivos/Imagens devem ser as URLs dos arquivos, separados por espaço. Relacionamentos devem ser os IDs separados por espaço.',
+      },
+      validation: {
+        periodPast: 'O período deve estar no futuro',
+        periodFull:
+          'Desculpe, o Pet Hotel está cheio neste período',
       },
     },
   },
@@ -186,58 +192,23 @@ const ptBR = {
   },
 
   roles: {
-    owner: {
-      label: 'Proprietário',
-      description: 'Acesso completo a todos os recursos',
+    manager: {
+      label: 'Gerente',
+      description: 'Acesso completo',
     },
-    editor: {
-      label: 'Editor',
-      description: 'Acesso para edição a todos os recursos',
+    employee: {
+      label: 'Funcionário',
+      description: 'Acesso de Funcionário',
     },
-    viewer: {
-      label: 'Visualizador',
-      description:
-        'Acesso de visualização a todos os recursos',
-    },
-    auditLogViewer: {
-      label: 'Visualizador de Registros de Autoria',
-      description:
-        'Acesso de visualização dos registros de autoria',
-    },
-    iamSecurityReviewer: {
-      label: 'Revisor de segurança',
-      description: `Acesso total para gerenciar as funções do usuário`,
-    },
-    entityEditor: {
-      label: 'Editor de Entidades',
-      description: 'Acesso de edição a todas as entidades',
-    },
-    entityViewer: {
-      label: 'Visualizador de Entidades',
-      description:
-        'Acesso de visualização a todas as entidades',
-    },
-    petEditor: {
-      label: 'Editor de pet',
-      description: 'Acesso de edição aos pet',
-    },
-    petViewer: {
-      label: 'Visualizador de pet',
-      description: 'Acesso de visualização aos pet',
-    },
-    bookingEditor: {
-      label: 'Editor de booking',
-      description: 'Acesso de edição aos booking',
-    },
-    bookingViewer: {
-      label: 'Visualizador de booking',
-      description: 'Acesso de visualização aos booking',
+    petOwner: {
+      label: 'Dono do Pet',
+      description: 'Acesso de dono to Pet',
     },
   },
 
   iam: {
-    title: 'Gerenciamento de usuários e permissões',
-    menu: 'IAM',
+    title: 'Usuários',
+    menu: 'Usuários',
     disable: 'Desabilitar',
     disabled: 'Desabilitado',
     enabled: 'Habilitado',
@@ -346,6 +317,8 @@ const ptBR = {
     },
     fields: {
       theme: 'Tema',
+      dailyFee: 'Valor da Diária',
+      capacity: 'Capacidade',
     },
     colors: {
       default: 'Padrão',
@@ -364,34 +337,6 @@ const ptBR = {
   },
   home: {
     menu: 'Inicial',
-    message: `Esta página usa dados falsos apenas para fins de demonstração. Você pode editá-la em frontend/view/home/HomePage.js.`,
-    charts: {
-      day: 'Dia',
-      red: 'Vermelho',
-      green: 'Verde',
-      yellow: 'Amarelho',
-      grey: 'Cinza',
-      blue: 'Azul',
-      sales: 'Vendas',
-      visitor: 'Visitantes',
-      months: {
-        1: 'Janeiro',
-        2: 'Fevereiro',
-        3: 'Março',
-        4: 'Abril',
-        5: 'Maio',
-        6: 'Junho',
-        7: 'Julho',
-      },
-      eating: 'Comendo',
-      drinking: 'Bebendo',
-      sleeping: 'Dormindo',
-      designing: 'Projetando',
-      coding: 'Codificando',
-      cycling: 'Pedalando',
-      running: 'Correndo',
-      customer: 'Cliente',
-    },
   },
   errors: {
     backToHome: 'Voltar a página inicial',

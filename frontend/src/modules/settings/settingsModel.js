@@ -1,5 +1,7 @@
 import { i18n } from 'i18n';
 import EnumeratorField from 'modules/shared/fields/enumeratorField';
+import DecimalField from 'modules/shared/fields/decimalField';
+import IntegerField from 'modules/shared/fields/integerField';
 
 const themes = [
   {
@@ -64,6 +66,20 @@ const fields = {
     'theme',
     label('theme'),
     themes,
+  ),
+  dailyFee: new DecimalField(
+    'dailyFee',
+    label('dailyFee'),
+    {
+      required: true,
+      min: 0.01,
+      scale: 2,
+    },
+  ),
+  capacity: new IntegerField(
+    'capacity',
+    label('capacity'),
+    { required: true, min: 1 },
   ),
 };
 

@@ -17,6 +17,7 @@ import InputRangeFormItem from 'view/shared/form/items/InputRangeFormItem';
 import UserAutocompleteFormItem from 'view/iam/autocomplete/UserAutocompleteFormItem';
 import SelectFormItem from 'view/shared/form/items/SelectFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
+import authSelectors from 'modules/auth/authSelectors';
 
 const { fields } = model;
 
@@ -24,11 +25,10 @@ const schema = new FormFilterSchema([
   fields.id,
   fields.owner,
   fields.pet,
-  fields.arrivalRange,
-  fields.departureRange,
   fields.status,
   fields.feeRange,
   fields.createdAtRange,
+  fields.period,
 ]);
 
 class BookingListFilter extends Component {
@@ -57,7 +57,7 @@ class BookingListFilter extends Component {
   };
 
   render() {
-    const { loading } = this.props;
+    const { loading, currentUser, isPetOwner } = this.props;
 
     return (
       <FilterWrapper>
@@ -84,32 +84,29 @@ class BookingListFilter extends Component {
                       showTime
                     />
                   </Col>
-                  <Col md={24} lg={12}>
-                    <UserAutocompleteFormItem
-                      name={fields.owner.name}
-                      label={fields.owner.label}
-                      layout={formItemLayout}
-                    />
-                  </Col>
+                  {!isPetOwner && (
+                    <Col md={24} lg={12}>
+                      <UserAutocompleteFormItem
+                        name={fields.owner.name}
+                        label={fields.owner.label}
+                        layout={formItemLayout}
+                      />
+                    </Col>
+                  )}
                   <Col md={24} lg={12}>
                     <PetAutocompleteFormItem
                       name={fields.pet.name}
                       label={fields.pet.label}
                       layout={formItemLayout}
+                      owner={
+                        isPetOwner ? currentUser.id : null
+                      }
                     />
                   </Col>
                   <Col md={24} lg={12}>
                     <DatePickerRangeFormItem
-                      name={fields.arrivalRange.name}
-                      label={fields.arrivalRange.label}
-                      layout={formItemLayout}
-                      showTime
-                    />
-                  </Col>
-                  <Col md={24} lg={12}>
-                    <DatePickerRangeFormItem
-                      name={fields.departureRange.name}
-                      label={fields.departureRange.label}
+                      name={fields.period.name}
+                      label={fields.period.label}
                       layout={formItemLayout}
                       showTime
                     />
@@ -166,7 +163,13 @@ class BookingListFilter extends Component {
 function select(state) {
   return {
     filter: selectors.selectFilter(state),
+    currentUser: authSelectors.selectCurrentUser(state),
+    isPetOwner: authSelectors.selectCurrentUserIsPetOwner(
+      state,
+    ),
   };
 }
 
-export default withRouter(connect(select)(BookingListFilter));
+export default withRouter(
+  connect(select)(BookingListFilter),
+);
