@@ -8,6 +8,8 @@ const bookingStatus = require('../../enumerators/bookingStatus');
 const moment = require('moment');
 const SettingsService = require('../settingsService');
 const BookingFeeCalculator = require('./bookingFeeCalculator');
+const BookingUpdateEmail = require('../../emails/bookingUpdateEmail');
+const EmailSender = require('../shared/email/emailSender');
 
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
@@ -70,6 +72,10 @@ module.exports = class BookingService {
   async update(id, data) {
     await this._validateUpdate(id, data);
     data.fee = await this.calculateFee(data);
+    const mustSendBookingUpdateEmail = await this._mustSendBookingUpdateEmail(
+      id,
+      data,
+    );
 
     const transaction = await AbstractRepository.createTransaction();
 
@@ -86,6 +92,10 @@ module.exports = class BookingService {
       await AbstractRepository.commitTransaction(
         transaction,
       );
+
+      if (mustSendBookingUpdateEmail) {
+        await this._sendBookingUpdateEmail(record);
+      }
 
       return record;
     } catch (error) {
@@ -319,9 +329,11 @@ module.exports = class BookingService {
       idToExclude,
     );
 
-    const capacity = (await SettingsService.findOrCreateDefault(
-      this.currentUser,
-    )).capacity;
+    const capacity = (
+      await SettingsService.findOrCreateDefault(
+        this.currentUser,
+      )
+    ).capacity;
 
     return bookingsAtPeriod < capacity;
   }
@@ -329,14 +341,59 @@ module.exports = class BookingService {
   async calculateFee(data) {
     const { arrival, departure } = data;
 
-    const dailyFee = (await SettingsService.findOrCreateDefault(
-      this.currentUser,
-    )).dailyFee;
+    const dailyFee = (
+      await SettingsService.findOrCreateDefault(
+        this.currentUser,
+      )
+    ).dailyFee;
 
     return BookingFeeCalculator.calculate(
       arrival,
       departure,
       dailyFee,
     );
+  }
+
+  async _sendBookingUpdateEmail(booking) {
+    const email = new BookingUpdateEmail(
+      this.language,
+      booking,
+    );
+
+    return new EmailSender(email).send();
+  }
+
+  async _mustSendBookingUpdateEmail(id, newRecord) {
+    if (newRecord.status !== bookingStatus.PROGRESS) {
+      return false;
+    }
+
+    return this._hasChangedEmployeeNotesOrPhotos(
+      id,
+      newRecord,
+    );
+  }
+
+  async _hasChangedEmployeeNotesOrPhotos(id, newRecord) {
+    const oldRecord = await this.findById(id);
+
+    if (
+      newRecord.employeeNotes &&
+      oldRecord.employeeNotes !== newRecord.employeeNotes
+    ) {
+      return true;
+    }
+
+    if (!newRecord.photos || !newRecord.photos.length) {
+      return false;
+    }
+
+    return newRecord.photos.some((photo) => {
+      const notInOldRecord = !oldRecord.photos.some(
+        (oldPhoto) => oldPhoto.id === photo.id,
+      );
+
+      return notInOldRecord;
+    });
   }
 };
