@@ -1,4 +1,4 @@
-const BookingService = require('../../../services/bookingService');
+const BookingService = require('../../../services/booking/bookingService');
 const PermissionChecker = require('../../../services/iam/permissionChecker');
 const permissions = require('../../../security/permissions')
   .values;
@@ -9,12 +9,13 @@ const schema = `
 
 const resolver = {
   bookingImport: async (root, args, context) => {
-    new PermissionChecker(context)
-      .validateHas(permissions.bookingImport);
+    new PermissionChecker(context).validateHas(
+      permissions.bookingImport,
+    );
 
     await new BookingService(context).import(
       args.data,
-      args.importHash
+      args.importHash,
     );
 
     return true;

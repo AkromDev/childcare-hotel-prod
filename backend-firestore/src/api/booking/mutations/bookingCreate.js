@@ -1,4 +1,4 @@
-const BookingService = require('../../../services/bookingService');
+const BookingService = require('../../../services/booking/bookingService');
 const PermissionChecker = require('../../../services/iam/permissionChecker');
 const permissions = require('../../../security/permissions')
   .values;
@@ -9,12 +9,11 @@ const schema = `
 
 const resolver = {
   bookingCreate: async (root, args, context) => {
-    new PermissionChecker(context)
-      .validateHas(permissions.bookingCreate);
-
-    return new BookingService(context).create(
-      args.data
+    new PermissionChecker(context).validateHas(
+      permissions.bookingCreate,
     );
+
+    return new BookingService(context).create(args.data);
   },
 };
 
