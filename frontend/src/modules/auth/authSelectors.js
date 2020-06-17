@@ -134,7 +134,14 @@ const selectCurrentUserIsEmployee = createSelector(
       currentUser,
     ).rolesMatchOneOf(Roles.values.employee);
 
-    return !isManager && isEmployee;
+    return isEmployee && !isManager;
+  },
+);
+
+const selectRedirectToNewPet = createSelector(
+  [selectRaw],
+  (raw) => {
+    return !!raw.redirectToNewPet;
   },
 );
 
@@ -158,6 +165,7 @@ const selectors = {
   selectCurrentUserIsPetOwner,
   selectCurrentUserIsManager,
   selectCurrentUserIsEmployee,
+  selectRedirectToNewPet,
 };
 
 export default selectors;

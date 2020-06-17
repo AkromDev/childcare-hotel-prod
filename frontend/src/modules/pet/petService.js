@@ -177,4 +177,9 @@ export default class PetService {
 
     return response.data.petAutocomplete;
   }
+
+  static async exists() {
+    const { count } = await this.list(null, null, 1, null);
+    return count > 0;
+  }
 }

@@ -4,18 +4,6 @@ const permissions = Permissions.values;
 
 const privateRoutes = [
   {
-    path: '/',
-    icon: 'home',
-    label: i18n('home.menu'),
-    menu: {
-      exact: true,
-    },
-    loader: () => import('view/home/HomePage'),
-    permissionRequired: null,
-    exact: true,
-  },
-
-  {
     path: '/profile',
     loader: () => import('view/auth/ProfileFormPage'),
     permissionRequired: null,

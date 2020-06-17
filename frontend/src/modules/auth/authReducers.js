@@ -9,6 +9,7 @@ const initialData = {
   loadingUpdateProfile: false,
   loading: false,
   errorMessage: null,
+  redirectToNewPet: false,
 };
 
 export default (state = initialData, { type, payload }) => {
@@ -42,6 +43,7 @@ export default (state = initialData, { type, payload }) => {
       currentUser: payload.currentUser || null,
       errorMessage: null,
       loading: false,
+      redirectToNewPet: !!payload.redirectToNewPet,
     };
   }
 
@@ -52,6 +54,7 @@ export default (state = initialData, { type, payload }) => {
       currentUser: null,
       errorMessage: payload || null,
       loading: false,
+      redirectToNewPet: false,
     };
   }
 
@@ -125,6 +128,7 @@ export default (state = initialData, { type, payload }) => {
         payload.authenticationUser || null,
       currentUser: payload.currentUser || null,
       loadingInit: false,
+      redirectToNewPet: !!payload.redirectToNewPet,
     };
   }
 
@@ -134,6 +138,7 @@ export default (state = initialData, { type, payload }) => {
       authenticationUser: null,
       currentUser: null,
       loadingInit: false,
+      redirectToNewPet: false,
     };
   }
 
