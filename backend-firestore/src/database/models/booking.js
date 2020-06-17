@@ -1,5 +1,6 @@
 const types = require('./types');
 const AbstractEntityModel = require('./abstractEntityModel');
+const bookingStatus = require('../../enumerators/bookingStatus');
 
 module.exports = class Booking extends AbstractEntityModel {
   constructor() {
@@ -12,10 +13,10 @@ module.exports = class Booking extends AbstractEntityModel {
       employeeNotes: new types.String(null, 20000),
       photos: new types.Files(),
       status: new types.Enumerator([
-        "booked",
-        "progress",
-        "cancelled",
-        "completed"
+        bookingStatus.BOOKED,
+        bookingStatus.PROGRESS,
+        bookingStatus.CANCELLED,
+        bookingStatus.COMPLETED,
       ]),
       cancellationNotes: new types.String(null, 20000),
       fee: new types.Number(null, null),
