@@ -22,7 +22,7 @@ const ptBR = {
   },
 
   app: {
-    title: 'Child Hotel',
+    title: 'Child Care Hotel',
   },
 
   entities: {
@@ -155,7 +155,7 @@ const ptBR = {
       validation: {
         periodPast: 'O período deve estar no futuro',
         periodFull:
-          'Desculpe, o Child Hotel está cheio neste período',
+          'Desculpe, o Child Care Hotel está cheio neste período',
       },
     },
   },

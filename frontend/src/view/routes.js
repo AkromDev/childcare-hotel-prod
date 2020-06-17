@@ -73,7 +73,7 @@ const privateRoutes = [
     loader: () => import('view/child/list/ChildListPage'),
     permissionRequired: permissions.childRead,
     exact: true,
-    icon: 'github',
+    icon: 'smile',
     label: i18n('entities.child.menu'),
     menu: true,
   },
