@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   const settings = sequelize.define(
     'settings',
     {
@@ -10,6 +10,12 @@ module.exports = function(sequelize, DataTypes) {
       theme: {
         type: DataTypes.STRING(255),
         allowNull: false,
+      },
+      dailyFee: {
+        type: DataTypes.DECIMAL(24, 2),
+      },
+      capacity: {
+        type: DataTypes.INTEGER,
       },
     },
     {
