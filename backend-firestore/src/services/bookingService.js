@@ -3,6 +3,7 @@ const ValidationError = require('../errors/validationError');
 const AbstractRepository = require('../database/repositories/abstractRepository');
 const UserRoleChecker = require('./iam/userRoleChecker');
 const ForbiddenError = require('../errors/forbiddenError');
+const bookingStatus = require('../enumerators/bookingStatus');
 
 module.exports = class BookingService {
   constructor({ currentUser, language }) {
@@ -35,6 +36,10 @@ module.exports = class BookingService {
       if (data.owner !== this.currentUser.id) {
         throw new ForbiddenError(this.language);
       }
+
+      if (data.status !== bookingStatus.BOOKED) {
+        throw new ForbiddenError(this.language);
+      }
     }
   }
 
@@ -62,9 +67,24 @@ module.exports = class BookingService {
   }
 
   async _validateUpdate(id, data) {
+    const existingData = await this.findById(id);
+
     if (UserRoleChecker.isPetOwner(this.currentUser)) {
       data.owner = this.currentUser.id;
       await this._validateIsSameOwner(id);
+
+      if (existingData.status !== bookingStatus.BOOKED) {
+        throw new ForbiddenError(this.language);
+      }
+
+      if (
+        ![
+          bookingStatus.CANCELLED,
+          bookingStatus.BOOKED,
+        ].includes(data.status)
+      ) {
+        throw new ForbiddenError(this.language);
+      }
     }
   }
 

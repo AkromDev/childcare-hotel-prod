@@ -21,6 +21,7 @@ import ImagesFormItem from 'view/shared/form/items/ImagesFormItem';
 import FilesFormItem from 'view/shared/form/items/FilesFormItem';
 import PetAutocompleteFormItem from 'view/pet/autocomplete/PetAutocompleteFormItem';
 import authSelectors from 'modules/auth/authSelectors';
+import bookingStatus from 'modules/booking/bookingStatus';
 
 const { fields } = model;
 
@@ -59,6 +60,35 @@ class BookingForm extends Component {
     return !!match.params.id;
   };
 
+  isStatusEnabled = () => {
+    const { isPetOwner } = this.props;
+
+    if (this.isEditing()) {
+      return true;
+    }
+
+    return !isPetOwner;
+  };
+
+  statusOptions = () => {
+    const { isPetOwner } = this.props;
+
+    if (isPetOwner) {
+      return this.statusOptionsPetOwner();
+    }
+
+    return fields.status.options;
+  };
+
+  statusOptionsPetOwner = () => {
+    return fields.status.options.filter((option) => {
+      return [
+        bookingStatus.BOOKED,
+        bookingStatus.CANCELLED,
+      ].includes(option.id);
+    });
+  };
+
   handleSubmit = (values) => {
     const { dispatch } = this.props;
     const { id, ...data } = this.schema.cast(values);
@@ -77,7 +107,9 @@ class BookingForm extends Component {
       return this.schema.initialValues(record);
     }
 
-    const initialValues = {};
+    const initialValues = {
+      status: bookingStatus.BOOKED,
+    };
 
     if (this.props.isPetOwner) {
       initialValues.owner = this.props.currentUser;
@@ -154,17 +186,19 @@ class BookingForm extends Component {
                   }}
                   max={fields.photos.max}
                 />
-                <SelectFormItem
-                  name={fields.status.name}
-                  label={fields.status.label}
-                  options={fields.status.options.map(
-                    (item) => ({
-                      value: item.id,
-                      label: item.label,
-                    }),
-                  )}
-                  required={fields.status.required}
-                />
+                {this.isStatusEnabled() && (
+                  <SelectFormItem
+                    name={fields.status.name}
+                    label={fields.status.label}
+                    options={this.statusOptions().map(
+                      (item) => ({
+                        value: item.id,
+                        label: item.label,
+                      }),
+                    )}
+                    required={fields.status.required}
+                  />
+                )}
                 <TextAreaFormItem
                   name={fields.cancellationNotes.name}
                   label={fields.cancellationNotes.label}

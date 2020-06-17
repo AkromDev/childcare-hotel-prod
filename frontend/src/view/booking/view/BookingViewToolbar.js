@@ -8,6 +8,7 @@ import bookingSelectors from 'modules/booking/bookingSelectors';
 import destroySelectors from 'modules/booking/destroy/bookingDestroySelectors';
 import destroyActions from 'modules/booking/destroy/bookingDestroyActions';
 import auditLogSelectors from 'modules/auditLog/auditLogSelectors';
+import selectors from 'modules/booking/view/bookingViewSelectors';
 
 class BookingViewToolbar extends Component {
   id = () => {
@@ -21,15 +22,16 @@ class BookingViewToolbar extends Component {
 
   render() {
     const {
-      hasPermissionToEdit,
+      hasPermissionToEditRecord,
       hasPermissionToAuditLogs,
       hasPermissionToDestroy,
       destroyLoading,
+      record,
     } = this.props;
 
     return (
       <Toolbar>
-        {hasPermissionToEdit && (
+        {hasPermissionToEditRecord(record) && (
           <Link to={`/booking/${this.id()}/edit`}>
             <Button type="primary" icon="edit">
               {i18n('common.edit')}
@@ -75,13 +77,14 @@ function select(state) {
     hasPermissionToAuditLogs: auditLogSelectors.selectPermissionToRead(
       state,
     ),
-    hasPermissionToEdit: bookingSelectors.selectPermissionToEdit(
+    hasPermissionToEditRecord: bookingSelectors.selectPermissionToEditRecord(
       state,
     ),
     hasPermissionToDestroy: bookingSelectors.selectPermissionToDestroy(
       state,
     ),
     destroyLoading: destroySelectors.selectLoading(state),
+    record: selectors.selectRecord(state),
   };
 }
 

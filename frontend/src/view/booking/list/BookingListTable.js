@@ -58,7 +58,7 @@ class BookingListTable extends Component {
           <Link to={`/booking/${record.id}`}>
             {i18n('common.view')}
           </Link>
-          {this.props.hasPermissionToEdit && (
+          {this.props.hasPermissionToEditRecord(record) && (
             <Link to={`/booking/${record.id}/edit`}>
               {i18n('common.edit')}
             </Link>
@@ -119,7 +119,7 @@ function select(state) {
     pagination: selectors.selectPagination(state),
     filter: selectors.selectFilter(state),
     selectedKeys: selectors.selectSelectedKeys(state),
-    hasPermissionToEdit: bookingSelectors.selectPermissionToEdit(
+    hasPermissionToEditRecord: bookingSelectors.selectPermissionToEditRecord(
       state,
     ),
     hasPermissionToDestroy: bookingSelectors.selectPermissionToDestroy(

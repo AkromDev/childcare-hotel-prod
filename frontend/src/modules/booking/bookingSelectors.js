@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import authSelectors from 'modules/auth/authSelectors';
 import PermissionChecker from 'modules/auth/permissionChecker';
 import Permissions from 'security/permissions';
+import bookingStatus from 'modules/booking/bookingStatus';
 
 const selectPermissionToRead = createSelector(
   [authSelectors.selectCurrentUser],
@@ -17,6 +18,30 @@ const selectPermissionToEdit = createSelector(
     new PermissionChecker(currentUser).match(
       Permissions.values.bookingEdit,
     ),
+);
+
+const selectPermissionToEditRecord = createSelector(
+  [
+    selectPermissionToEdit,
+    authSelectors.selectCurrentUserIsPetOwner,
+  ],
+  (hasPermissionToEdit, isPetOwner) => {
+    return (record) => {
+      if (!hasPermissionToEdit) {
+        return false;
+      }
+
+      if (!record) {
+        return false;
+      }
+
+      if (isPetOwner) {
+        return record.status === bookingStatus.BOOKED;
+      }
+
+      return true;
+    };
+  },
 );
 
 const selectPermissionToCreate = createSelector(
@@ -49,6 +74,7 @@ const selectors = {
   selectPermissionToCreate,
   selectPermissionToDestroy,
   selectPermissionToImport,
+  selectPermissionToEditRecord,
 };
 
 export default selectors;
