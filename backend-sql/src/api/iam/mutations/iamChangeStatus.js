@@ -10,7 +10,7 @@ const schema = `
 const resolver = {
   iamChangeStatus: async (root, args, context) => {
     new PermissionChecker(context).validateHas(
-      permissions.iamEdit,
+      permissions.iamChangeStatus,
     );
 
     let statusChanger = new IamStatusChanger(
