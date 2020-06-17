@@ -10,7 +10,7 @@ const schema = `
 const resolver = {
   iamRemove: async (root, args, context) => {
     new PermissionChecker(context).validateHas(
-      permissions.iamEdit,
+      permissions.iamRemove,
     );
 
     let remover = new IamRemover(
