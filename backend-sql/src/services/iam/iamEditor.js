@@ -86,8 +86,8 @@ module.exports = class IamEditor {
     }
   }
 
-  async _isRemovingOwnOwnerRole() {
-    if (this._roles.includes(Roles.values.owner)) {
+  async _isRemovingOwnManagerRole() {
+    if (this._roles.includes(Roles.values.manager)) {
       return false;
     }
 
@@ -99,7 +99,7 @@ module.exports = class IamEditor {
       this.currentUser.id,
     );
 
-    return currentUserRoles.includes(Roles.values.owner);
+    return currentUserRoles.includes(Roles.values.manager);
   }
 
   async _validate() {
@@ -116,7 +116,7 @@ module.exports = class IamEditor {
     assert(this.data.id, 'id is required');
     assert(this._roles, 'roles is required (can be empty)');
 
-    if (await this._isRemovingOwnOwnerRole()) {
+    if (await this._isRemovingOwnManagerRole()) {
       throw new ValidationError(
         this.language,
         'iam.errors.revokingOwnPermission',
