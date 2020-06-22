@@ -84,14 +84,6 @@ class ChildRepository extends AbstractEntityRepository {
         sequelizeFilter.appendEqual('type', filter.type);
       }
 
-      // if (filter.breed) {
-      //   sequelizeFilter.appendIlike(
-      //     'breed',
-      //     filter.breed,
-      //     this.modelName,
-      //   );
-      // }
-
       if (filter.size) {
         sequelizeFilter.appendEqual('size', filter.size);
       }

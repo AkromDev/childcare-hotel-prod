@@ -21,13 +21,6 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         values: ['boy', 'girl'],
       },
-      // breed: {
-      //   type: DataTypes.STRING(255),
-      //   allowNull: false,
-      //   validate: {
-      //     notEmpty: true,
-      //   },
-      // },
       size: {
         type: DataTypes.ENUM,
         allowNull: false,
